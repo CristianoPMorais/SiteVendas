@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fred AI | Agentes Autônomos de IA para Advocacia e Comércio no WhatsApp</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #030712;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(30, 58, 138, 0.22) 0px, transparent 50%),
+                radial-gradient(at 100% 20%, rgba(88, 28, 135, 0.18) 0px, transparent 50%),
+                radial-gradient(at 50% 100%, rgba(15, 23, 42, 0.8) 0px, transparent 50%);
+            background-attachment: fixed;
+            color: #f3f4f6;
+        }
+        .glass-card {
+            background: rgba(17, 24, 39, 0.65);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+        }
+        .glass-card-hover:hover {
+            border-color: rgba(59, 130, 246, 0.4);
+            box-shadow: 0 12px 40px -10px rgba(37, 99, 235, 0.25);
+            transform: translateY(-2px);
+        }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: rgba(3, 7, 18, 0.8); }
+        ::-webkit-scrollbar-thumb { background: rgba(59, 130, 246, 0.4); border-radius: 9999px; }
+    </style>
+</head>
+<body class="antialiased selection:bg-blue-600 selection:text-white overflow-x-hidden">
+
+    <!-- Navbar Fixa -->
+    <nav class="sticky top-0 z-40 glass-card border-b border-gray-800/80">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl h-20 flex items-center justify-between">
+            <a href="#" class="flex items-center space-x-3 group">
+                <div class="relative">
+                    <div class="absolute -inset-1 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl blur opacity-75 group-hover:opacity-100 transition"></div>
+                    <div class="relative w-10 h-10 bg-gray-900 border border-gray-700 rounded-xl flex items-center justify-center text-blue-400">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <rect width="18" height="10" x="3" y="11" rx="2"></rect>
+                            <circle cx="9" cy="16" r="1"></circle>
+                            <circle cx="15" cy="16" r="1"></circle>
+                            <path d="M12 11V7"></path>
+                            <path d="M7 7h10"></path>
+                            <circle cx="12" cy="5" r="1"></circle>
+                        </svg>
+                    </div>
+                </div>
+                <div>
+                    <span class="text-xl font-extrabold tracking-tight bg-gradient-to-r from-white via-gray-200 to-gray-400 bg-clip-text text-transparent">
+                        Fred<span class="text-blue-500">.AI</span>
+                    </span>
+                </div>
+            </a>
+
+            <div class="hidden md:flex items-center space-x-8 text-sm font-medium text-gray-300">
+                <a href="#tecnologia" class="hover:text-white transition">Tecnologia</a>
+                <a href="#nichos" class="hover:text-white transition">Advocacia & Comércio</a>
+                <a href="#planos" class="hover:text-white transition">Planos</a>
+                <a href="#faq" class="hover:text-white transition">Dúvidas</a>
+            </div>
+
+            <div class="flex items-center space-x-3">
+                <button onclick="abrirModalContato('Demonstração Geral')" class="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-xs sm:text-sm font-bold px-4 sm:px-5 py-2.5 rounded-xl transition shadow-lg shadow-blue-950/50">
+                    Agendar Demo
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 1) HERO SECTION -->
+    <section class="relative pt-16 pb-24 lg:pt-24 lg:pb-32">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl text-center space-y-8">
+            <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-semibold tracking-wide">
+                <span class="w-2 h-2 rounded-full bg-blue-500 animate-ping"></span>
+                Powered by Google Gemini & Command Center
+            </div>
+
+            <h1 class="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight leading-[1.12]">
+                Transforme seu WhatsApp em uma <span class="bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400 bg-clip-text text-transparent">Máquina de Atendimento</span> 24/7
+            </h1>
+
+            <p class="text-base sm:text-xl text-gray-400 leading-relaxed max-w-3xl mx-auto">
+                Esqueça chatbots engessados de "digite 1 ou 2". Implemente um <strong>Agente de IA Humanizado</strong> que ouve áudios, lê imagens, entende contexto jurídico ou comercial e fecha oportunidades enquanto você dorme.
+            </p>
+
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
+                <button onclick="abrirModalContato('Implementação Imediata')" class="w-full sm:w-auto bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold px-8 py-4 rounded-2xl text-base transition shadow-xl shadow-blue-900/40 flex items-center justify-center gap-2">
+                    <span>🚀</span> Quero no meu WhatsApp
+                </button>
+                <a href="#tecnologia" class="w-full sm:w-auto glass-card hover:bg-gray-800/80 text-gray-200 font-semibold px-8 py-4 rounded-2xl text-base transition flex items-center justify-center gap-2">
+                    Conhecer o Painel
+                </a>
+            </div>
+
+            <div class="pt-8 flex flex-wrap items-center justify-center gap-8 text-xs sm:text-sm text-gray-400 border-t border-gray-800/80 max-w-3xl mx-auto">
+                <div class="flex items-center gap-2"><span class="text-emerald-400 text-base">✓</span> Resposta em &lt; 4 segundos</div>
+                <div class="flex items-center gap-2"><span class="text-emerald-400 text-base">✓</span> Compreende Áudio e Foto</div>
+                <div class="flex items-center gap-2"><span class="text-emerald-400 text-base">✓</span> Painel Web Exclusivo</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 2) DIFERENCIAIS TECNOLÓGICOS -->
+    <section id="tecnologia" class="py-20 border-t border-gray-800/60 relative">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <span class="text-xs font-bold uppercase tracking-widest text-blue-400">Engenharia de Ponta</span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold mt-2 mb-4">Por que nossos Agentes são diferentes de tudo que você já viu?</h2>
+                <p class="text-gray-400 text-sm sm:text-base">Desenvolvemos uma arquitetura proprietária que elimina os erros clássicos de robôs comuns e dá controle total ao dono do negócio.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="glass-card glass-card-hover p-6 rounded-2xl transition duration-300">
+                    <div class="w-12 h-12 rounded-xl bg-blue-500/10 border border-blue-500/20 text-blue-400 flex items-center justify-center text-2xl mb-5">🧠</div>
+                    <h3 class="text-lg font-bold text-white mb-2">Debounce Inteligente</h3>
+                    <p class="text-xs sm:text-sm text-gray-400 leading-relaxed">Seu cliente manda várias mensagens picadas? Nossa IA aguarda ele terminar de digitar e responde tudo de forma única e coesa.</p>
+                </div>
+                <div class="glass-card glass-card-hover p-6 rounded-2xl transition duration-300">
+                    <div class="w-12 h-12 rounded-xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 flex items-center justify-center text-2xl mb-5">🎙️</div>
+                    <h3 class="text-lg font-bold text-white mb-2">Ouve Áudios e Lê Fotos</h3>
+                    <p class="text-xs sm:text-sm text-gray-400 leading-relaxed">O agente transcreve e interpreta áudios longos no WhatsApp, além de analisar fotos de documentos, intimações, produtos ou comprovantes.</p>
+                </div>
+                <div class="glass-card glass-card-hover p-6 rounded-2xl transition duration-300">
+                    <div class="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center text-2xl mb-5">🤝</div>
+                    <h3 class="text-lg font-bold text-white mb-2">Transbordo Humano</h3>
+                    <p class="text-xs sm:text-sm text-gray-400 leading-relaxed">Quando o cliente pede para falar com um atendente, a IA pausa automaticamente e deixa o caminho livre para sua equipe assumir.</p>
+                </div>
+                <div class="glass-card glass-card-hover p-6 rounded-2xl transition duration-300">
+                    <div class="w-12 h-12 rounded-xl bg-purple-500/10 border border-purple-500/20 text-purple-400 flex items-center justify-center text-2xl mb-5">🎛️</div>
+                    <h3 class="text-lg font-bold text-white mb-2">Painel Command Center</h3>
+                    <p class="text-xs sm:text-sm text-gray-400 leading-relaxed">Acompanhe conversas em tempo real, altere o script da IA com 1 clique, bloqueie contatos indesejados ou controle tudo pelo painel.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3) SOLUÇÕES POR NICHO -->
+    <section id="nichos" class="py-20 border-t border-gray-800/60">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <span class="text-xs font-bold uppercase tracking-widest text-indigo-400">Especialização Vertical</span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold mt-2 mb-4">Treinado sob medida para a realidade do seu negócio</h2>
+                <p class="text-gray-400 text-sm sm:text-base">Não usamos prompts genéricos. Configuramos a base de conhecimento, o tom de voz e os gatilhos específicos da sua área.</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div class="glass-card rounded-3xl p-8 border border-blue-500/25 flex flex-col justify-between">
+                    <div>
+                        <span class="px-3.5 py-1.5 rounded-xl bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-bold uppercase tracking-wider">⚖️ Jurídico & Escritórios</span>
+                        <h3 class="text-2xl font-extrabold text-white mt-4 mb-3">Agente de Triagem & Qualificação Jurídica</h3>
+                        <p class="text-sm text-gray-400 mb-6 leading-relaxed">O agente acolhe o cliente com empatia, coleta os fatos essenciais e entrega o caso mastigado para o advogado fechar o contrato sem perder tempo com curiosos.</p>
+                    </div>
+                    <button onclick="abrirModalContato('Plano Advocacia')" class="w-full py-3.5 rounded-xl bg-blue-600/20 hover:bg-blue-600 text-blue-300 hover:text-white border border-blue-500/30 font-bold text-sm transition">Solicitar Agente para Escritório →</button>
+                </div>
+
+                <div class="glass-card rounded-3xl p-8 border border-indigo-500/25 flex flex-col justify-between">
+                    <div>
+                        <span class="px-3.5 py-1.5 rounded-xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 text-xs font-bold uppercase tracking-wider">🛍️ Comércio & Lojas</span>
+                        <h3 class="text-2xl font-extrabold text-white mt-4 mb-3">Agente Consultor de Vendas & Atendimento</h3>
+                        <p class="text-sm text-gray-400 mb-6 leading-relaxed">Atenda instantaneamente no horário de pico, finais de semana e feriados. Tira dúvidas de catálogo, calcula condições e encaminha o pedido pronto para a equipe.</p>
+                    </div>
+                    <button onclick="abrirModalContato('Plano Comércio')" class="w-full py-3.5 rounded-xl bg-indigo-600/20 hover:bg-indigo-600 text-indigo-300 hover:text-white border border-indigo-500/30 font-bold text-sm transition">Solicitar Agente para Comércio →</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 4) PLANOS E INVESTIMENTO -->
+    <section id="planos" class="py-20 border-t border-gray-800/60">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
+            <div class="text-center max-w-3xl mx-auto mb-12">
+                <span class="text-xs font-bold uppercase tracking-widest text-emerald-400">Investimento Transparente</span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold mt-2 mb-4">Escolha o plano ideal para escalar seu atendimento</h2>
+                <p class="text-gray-400 text-sm sm:text-base">Implantação assistida pela nossa equipe: entregamos seu agente treinado, conectado e pronto para atender.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+                <div class="glass-card rounded-3xl p-8 flex flex-col justify-between border border-gray-800">
+                    <div>
+                        <h3 class="text-lg font-bold text-white">Start Essencial</h3>
+                        <p class="text-xs text-gray-400 mt-1">Ideal para lojas locais e autônomos.</p>
+                        <div class="my-6"><span class="text-xs text-gray-400">R$</span><span class="text-4xl font-extrabold text-white">297</span><span class="text-xs text-gray-400">/mês</span></div>
+                        <ul class="space-y-3 text-xs sm:text-sm text-gray-300 border-t border-gray-800 pt-6">
+                            <li class="flex items-center gap-2"><span class="text-emerald-400">✓</span> 1 Número de WhatsApp</li>
+                            <li class="flex items-center gap-2"><span class="text-emerald-400">✓</span> Atendimento 24/7 com IA</li>
+                            <li class="flex items-center gap-2"><span class="text-emerald-400">✓</span> Command Center básico</li>
+                        </ul>
+                    </div>
+                    <button onclick="abrirModalContato('Plano Start Essencial')" class="mt-8 w-full py-3.5 rounded-xl bg-gray-800 hover:bg-gray-700 text-white font-bold text-sm transition">Contratar Start</button>
+                </div>
+
+                <div class="glass-card rounded-3xl p-8 flex flex-col justify-between border-2 border-blue-500 relative shadow-2xl shadow-blue-950/50">
+                    <div class="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-[10px] font-extrabold uppercase tracking-wider px-4 py-1 rounded-full shadow-lg">Mais Escolhido</div>
+                    <div>
+                        <h3 class="text-xl font-bold text-white">Pro Multimodal</h3>
+                        <p class="text-xs text-blue-300 mt-1">Completo para escritórios e comércios.</p>
+                        <div class="my-6"><span class="text-xs text-gray-400">R$</span><span class="text-5xl font-extrabold text-white">497</span><span class="text-xs text-gray-400">/mês</span></div>
+                        <ul class="space-y-3 text-xs sm:text-sm text-gray-200 border-t border-gray-800 pt-6">
+                            <li class="flex items-center gap-2"><span class="text-blue-400 font-bold">✓</span> <strong>Compreende Áudios e Imagens</strong></li>
+                            <li class="flex items-center gap-2"><span class="text-blue-400 font-bold">✓</span> Script Jurídico ou Comercial</li>
+                            <li class="flex items-center gap-2"><span class="text-blue-400 font-bold">✓</span> Command Center Completo</li>
+                            <li class="flex items-center gap-2"><span class="text-blue-400 font-bold">✓</span> Rotação automática de Chaves API</li>
+                        </ul>
+                    </div>
+                    <button onclick="abrirModalContato('Plano Pro Multimodal')" class="mt-8 w-full py-4 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold text-sm transition shadow-lg">Começar com o Pro →</button>
+                </div>
+
+                <div class="glass-card rounded-3xl p-8 flex flex-col justify-between border border-gray-800">
+                    <div>
+                        <h3 class="text-lg font-bold text-white">Business Scale</h3>
+                        <p class="text-xs text-gray-400 mt-1">Para bancas, franquias e redes.</p>
+                        <div class="my-6"><span class="text-xs text-gray-400">R$</span><span class="text-4xl font-extrabold text-white">897</span><span class="text-xs text-gray-400">/mês</span></div>
+                        <ul class="space-y-3 text-xs sm:text-sm text-gray-300 border-t border-gray-800 pt-6">
+                            <li class="flex items-center gap-2"><span class="text-purple-400">✓</span> Até 3 Números Independentes</li>
+                            <li class="flex items-center gap-2"><span class="text-purple-400">✓</span> Tudo do Plano Pro</li>
+                            <li class="flex items-center gap-2"><span class="text-purple-400">✓</span> Base de Conhecimento em PDFs</li>
+                        </ul>
+                    </div>
+                    <button onclick="abrirModalContato('Plano Business Scale')" class="mt-8 w-full py-3.5 rounded-xl bg-gray-800 hover:bg-gray-700 text-white font-bold text-sm transition">Falar com Especialista</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5) FAQ COMPLETO -->
+    <section id="faq" class="py-20 border-t border-gray-800/60">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-4xl">
+            <div class="text-center mb-12">
+                <span class="text-xs font-bold uppercase tracking-widest text-blue-400">Perguntas Frequentes</span>
+                <h2 class="text-3xl font-extrabold mt-2">Tire suas dúvidas antes de automatizar</h2>
+            </div>
+
+            <div class="space-y-4">
+                <div class="glass-card rounded-2xl overflow-hidden">
+                    <button onclick="toggleFaq(1)" class="w-full p-5 text-left flex justify-between items-center font-bold text-sm sm:text-base text-gray-100 hover:text-blue-400 transition">
+                        <span>Preciso trocar meu número de WhatsApp atual?</span>
+                        <span id="faq-icon-1" class="text-blue-400 font-mono text-lg">+</span>
+                    </button>
+                    <div id="faq-body-1" class="hidden px-5 pb-5 text-xs sm:text-sm text-gray-400 leading-relaxed border-t border-gray-800/60 pt-3">
+                        Não! Você utiliza exatamente o mesmo número de WhatsApp que seu escritório ou comércio já usa hoje. A conexão é feita lendo um QR Code pelo próprio painel Command Center, e você continua vendo todas as conversas normalmente no seu celular e no WhatsApp Web.
+                    </div>
+                </div>
+
+                <div class="glass-card rounded-2xl overflow-hidden">
+                    <button onclick="toggleFaq(2)" class="w-full p-5 text-left flex justify-between items-center font-bold text-sm sm:text-base text-gray-100 hover:text-blue-400 transition">
+                        <span>Como funciona quando eu mesmo quero assumir a conversa?</span>
+                        <span id="faq-icon-2" class="text-blue-400 font-mono text-lg">+</span>
+                    </button>
+                    <div id="faq-body-2" class="hidden px-5 pb-5 text-xs sm:text-sm text-gray-400 leading-relaxed border-t border-gray-800/60 pt-3">
+                        Nosso sistema possui transbordo inteligente. Se o cliente pedir para falar com um humano, a IA pausa automaticamente naquele contato. Além disso, você pode pausar ou bloquear qualquer contato enviando um comando simples no chat ou clicando em um botão no seu Painel Command Center.
+                    </div>
+                </div>
+
+                <div class="glass-card rounded-2xl overflow-hidden">
+                    <button onclick="toggleFaq(3)" class="w-full p-5 text-left flex justify-between items-center font-bold text-sm sm:text-base text-gray-100 hover:text-blue-400 transition">
+                        <span>Para escritórios de advocacia, a IA respeita as normas da OAB?</span>
+                        <span id="faq-icon-3" class="text-blue-400 font-mono text-lg">+</span>
+                    </button>
+                    <div id="faq-body-3" class="hidden px-5 pb-5 text-xs sm:text-sm text-gray-400 leading-relaxed border-t border-gray-800/60 pt-3">
+                        Sim. Configuramos instruções rigorosas de comportamento (System Instructions) para que o agente atue estritamente na recepção, acolhimento, triagem de fatos e agendamento de consulta, sem dar pareceres jurídicos definitivos ou prometer êxito em ações.
+                    </div>
+                </div>
+
+                <div class="glass-card rounded-2xl overflow-hidden">
+                    <button onclick="toggleFaq(4)" class="w-full p-5 text-left flex justify-between items-center font-bold text-sm sm:text-base text-gray-100 hover:text-blue-400 transition">
+                        <span>Em quanto tempo meu agente fica pronto para rodar?</span>
+                        <span id="faq-icon-4" class="text-blue-400 font-mono text-lg">+</span>
+                    </button>
+                    <div id="faq-body-4" class="hidden px-5 pb-5 text-xs sm:text-sm text-gray-400 leading-relaxed border-t border-gray-800/60 pt-3">
+                        Em até 48 horas após a reunião de alinhamento. Nós criamos o roteiro personalizado do seu negócio, configuramos seu painel exclusivo e fazemos a ativação junto com você.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA FINAL -->
+    <section class="py-16">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl">
+            <div class="glass-card rounded-3xl p-8 sm:p-12 text-center border border-blue-500/30 relative overflow-hidden">
+                <div class="absolute inset-0 bg-gradient-to-r from-blue-600/10 via-indigo-600/10 to-purple-600/10 -z-10"></div>
+                <h2 class="text-2xl sm:text-4xl font-extrabold text-white mb-4">
+                    Cada minuto sem resposta no WhatsApp é um cliente fechando com seu concorrente.
+                </h2>
+                <p class="text-sm sm:text-base text-gray-300 max-w-2xl mx-auto mb-8">
+                    Coloque um Agente de IA trabalhando 24 horas por dia no seu escritório ou comércio com controle total pelo Command Center.
+                </p>
+                <button onclick="abrirModalContato('CTA Final - Quero Começar')" class="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold px-8 py-4 rounded-2xl text-sm sm:text-base transition shadow-xl shadow-blue-950/60">
+                    Falar com Consultor no WhatsApp Agora
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="border-t border-gray-800/80 py-10 text-center text-xs text-gray-500">
+        <div class="container mx-auto px-4">
+            <p class="font-semibold text-gray-400 mb-1">Fred.AI • Arquitetura de Agentes Autônomos & Command Center</p>
+            <p>© 2026 Todos os direitos reservados. Desenvolvido para Advocacia e Comércio de Alta Performance.</p>
+        </div>
+    </footer>
+
+    <!-- BOTÃO FLUTUANTE DE WHATSAPP (COM A BOLINHA PULSANDO FORA DO ÍCONE) -->
+    <a href="https://wa.me/556299615120?text=Olá!%20Vim%20pelo%20site%20e%20gostaria%20de%20saber%20mais%20sobre%20os%20agentes%20de%20IA." 
+       target="_blank" 
+       class="fixed bottom-6 right-6 z-50 bg-[#10B981] hover:bg-[#059669] text-white w-14 h-14 sm:w-16 sm:h-16 rounded-full flex items-center justify-center shadow-2xl transition-all duration-300 hover:scale-110 group focus:outline-none"
+       aria-label="Falar no WhatsApp">
+        <!-- Bolinha pulsante posicionada completamente fora do botão principal -->
+        <span class="absolute -top-1 -right-1 w-4 h-4 bg-[#10B981] rounded-full animate-ping pointer-events-none"></span>
+        <span class="absolute -top-1 -right-1 w-4 h-4 bg-[#34D399] border-2 border-[#030712] rounded-full pointer-events-none"></span>
+        
+        <!-- Ícone SVG do WhatsApp -->
+        <svg class="w-8 h-8 sm:w-9 sm:h-9 fill-current" viewBox="0 0 24 24">
+            <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/>
+        </svg>
+    </a>
+
+    <!-- MODAL DE CAPTURA / CONTATO WHATSAPP -->
+    <div id="modal-contato" class="fixed inset-0 bg-black/80 backdrop-blur-md hidden items-center justify-center p-4 z-50">
+        <div class="glass-card border border-gray-700/80 w-full max-w-md rounded-3xl p-6 sm:p-8 shadow-2xl relative">
+            <button onclick="fecharModalContato()" class="absolute top-5 right-5 text-gray-400 hover:text-white font-bold text-lg">✕</button>
+            
+            <div class="flex items-center gap-3 mb-4">
+                <div class="w-10 h-10 rounded-xl bg-blue-600/20 border border-blue-500/30 text-blue-400 flex items-center justify-center text-xl">🤖</div>
+                <div>
+                    <h3 class="font-bold text-lg text-white">Agendar Demonstração</h3>
+                    <p id="modal-interesse-badge" class="text-xs text-blue-400 font-semibold">Interesse: Demonstração Geral</p>
+                </div>
+            </div>
+
+            <form onsubmit="enviarParaWhatsapp(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-gray-400 uppercase mb-1.5">Seu Nome</label>
+                    <input id="lead-nome" type="text" required placeholder="Ex: Dr. Ricardo / Ana Paula" class="w-full bg-gray-950/90 border border-gray-700 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-blue-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-gray-400 uppercase mb-1.5">Segmento do Negócio</label>
+                    <select id="lead-segmento" class="w-full bg-gray-950/90 border border-gray-700 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-blue-500">
+                        <option value="Escritório de Advocacia">⚖️ Escritório de Advocacia</option>
+                        <option value="Comércio / Loja / Varejo">🛍️ Comércio / Loja / Varejo</option>
+                        <option value="Clínica ou Prestação de Serviços">🏢 Clínica / Serviços</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-gray-400 uppercase mb-1.5">Seu WhatsApp (com DDD)</label>
+                    <input id="lead-telefone" type="tel" required placeholder="Ex: (62) 99999-9999" class="w-full bg-gray-950/90 border border-gray-700 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-blue-500">
+                </div>
+                <button type="submit" class="w-full bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold py-3.5 rounded-xl text-sm transition shadow-lg flex items-center justify-center gap-2 mt-2">
+                    <span>💬</span> Iniciar Conversa no WhatsApp
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const NUMERO_WHATSAPP_VENDAS = "556299615120";
+        let interesseAtual = "Demonstração Geral";
+
+        function abrirModalContato(interesse) {
+            interesseAtual = interesse;
+            document.getElementById('modal-interesse-badge').textContent = `Interesse: ${interesse}`;
+            const selectSeg = document.getElementById('lead-segmento');
+            if (interesse.toLowerCase().includes('advocacia')) selectSeg.value = "Escritório de Advocacia";
+            else if (interesse.toLowerCase().includes('comércio')) selectSeg.value = "Comércio / Loja / Varejo";
+
+            const modal = document.getElementById('modal-contato');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function fecharModalContato() {
+            const modal = document.getElementById('modal-contato');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        function enviarParaWhatsapp(event) {
+            event.preventDefault();
+            const nome = document.getElementById('lead-nome').value.trim();
+            const segmento = document.getElementById('lead-segmento').value;
+            const telefone = document.getElementById('lead-telefone').value.trim();
+
+            const mensagem = `Olá! Vim pelo site do *Fred.AI*.\n\n` +
+                             `👤 *Nome:* ${nome}\n` +
+                             `🏢 *Segmento:* ${segmento}\n` +
+                             `📱 *WhatsApp:* ${telefone}\n` +
+                             `🎯 *Interesse:* ${interesseAtual}\n` +
+                             `Gostaria de contratar um Agente de IA para meu negócio!`;
+
+            const url = `https://wa.me/${NUMERO_WHATSAPP_VENDAS}?text=${encodeURIComponent(mensagem)}`;
+            window.open(url, '_blank');
+            fecharModalContato();
+        }
+
+        function toggleFaq(id) {
+            const body = document.getElementById(`faq-body-${id}`);
+            const icon = document.getElementById(`faq-icon-${id}`);
+            if (body.classList.contains('hidden')) {
+                body.classList.remove('hidden');
+                icon.textContent = "−";
+            } else {
+                body.classList.add('hidden');
+                icon.textContent = "+";
+            }
+        }
+    </script>
+</body>
+</html>
