@@ -19,6 +19,14 @@ const PORT = process.env.PORT || 3000;
 const timestampInicioBot = Math.floor(Date.now() / 1000);
 
 app.use(express.json({ limit: '5mb' }));
+
+// Rota raiz '/' servindo o site da Digitavia antes do static (para não cair em public/index.html)
+app.get('/', (req, res) => {
+    const emPublic = path.join(__dirname, 'public', 'index_pdp_gemini.html');
+    const naRaiz = path.join(__dirname, 'index_pdp_gemini.html');
+    res.sendFile(fs.existsSync(emPublic) ? emPublic : naRaiz);
+});
+
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(__dirname));
 
@@ -380,7 +388,7 @@ function respostaFallbackDigitavia(ultimaPergunta = '') {
 }
 
 // =========================================================
-// 🌐 ROTA /api/gemini PARA O CHAT WEB DA DIGITAVIA
+// 🌐 ROTAS /api/gemini E /api/transbordo-web PARA O CHAT WEB
 // =========================================================
 app.post('/api/gemini', async (req, res) => {
     const { systemInstruction, contents, keyIndex } = req.body || {};
@@ -388,46 +396,6 @@ app.post('/api/gemini', async (req, res) => {
     const safeContents = Array.isArray(contents) && contents.length > 0
         ? contents
         : [{ role: 'user', parts: [{ text: 'Olá' }] }];
-app.post('/api/transbordo-web', async (req, res) => {
-    const { nome, segmento, telefone, necessidade, historico } = req.body || {};
-    const numLimpo = formatarNumero(telefone);
-    const destinoWhatsapp = '556299615120';
-
-    const resumoHist = Array.isArray(historico)
-        ? historico
-            .slice(-6)
-            .map(m => `${m.role === 'user' ? 'Visitante' : 'Digitavia'}: ${m.parts?.map(p => p.text || '').join(' ')}`)
-            .join('\n')
-        : '';
-
-    const textoAlerta = [
-        '🔔 *NOVO ATENDIMENTO AGUARDANDO HUMANO (CHAT DO SITE)*',
-        `👤 *Nome:* ${nome || 'Não informado'}`,
-        `🏢 *Segmento:* ${segmento || 'Não informado'}`,
-        `📱 *WhatsApp informado:* ${numLimpo || telefone || 'Não informado'}`,
-        `📝 *Contexto:* ${necessidade || 'Solicitou atendente no chat'}`,
-        resumoHist ? `\n💬 *Últimas mensagens:*\n${resumoHist}` : ''
-    ].join('\n').trim();
-
-    let enviadoWhatsapp = false;
-    if (sockInstance && connectionStatus === 'open') {
-        try {
-            await sockInstance.sendMessage(`${destinoWhatsapp}@s.whatsapp.net`, { text: textoAlerta });
-            enviadoWhatsapp = true;
-        } catch (err) {
-            console.error('❌ Erro ao enviar alerta do chat web no WhatsApp:', err.message);
-        }
-    }
-
-    const hora = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
-    io.emit('new_message', {
-        sender: numLimpo || 'Site-Chat',
-        text: `[Transbordo Site] ${nome || 'Visitante'} (${segmento || '-'}) - ${numLimpo || telefone || '-'}`,
-        time: hora
-    });
-
-    res.json({ success: true, enviadoWhatsapp });
-});
 
     const ultimaMensagemUsuario = [...safeContents]
         .reverse()
@@ -470,6 +438,47 @@ app.post('/api/transbordo-web', async (req, res) => {
         totalKeys: chaves.length,
         source: 'fallback-apos-rotacao'
     });
+});
+
+app.post('/api/transbordo-web', async (req, res) => {
+    const { nome, segmento, telefone, necessidade, historico } = req.body || {};
+    const numLimpo = formatarNumero(telefone);
+    const destinoWhatsapp = '556299615120';
+
+    const resumoHist = Array.isArray(historico)
+        ? historico
+            .slice(-6)
+            .map(m => `${m.role === 'user' ? 'Visitante' : 'Digitavia'}: ${m.parts?.map(p => p.text || '').join(' ')}`)
+            .join('\n')
+        : '';
+
+    const textoAlerta = [
+        '🔔 *NOVO ATENDIMENTO AGUARDANDO HUMANO (CHAT DO SITE)*',
+        `👤 *Nome:* ${nome || 'Não informado'}`,
+        `🏢 *Segmento:* ${segmento || 'Não informado'}`,
+        `📱 *WhatsApp informado:* ${numLimpo || telefone || 'Não informado'}`,
+        `📝 *Contexto:* ${necessidade || 'Solicitou atendente no chat'}`,
+        resumoHist ? `\n💬 *Últimas mensagens:*\n${resumoHist}` : ''
+    ].join('\n').trim();
+
+    let enviadoWhatsapp = false;
+    if (sockInstance && connectionStatus === 'open') {
+        try {
+            await sockInstance.sendMessage(`${destinoWhatsapp}@s.whatsapp.net`, { text: textoAlerta });
+            enviadoWhatsapp = true;
+        } catch (err) {
+            console.error('❌ Erro ao enviar alerta do chat web no WhatsApp:', err.message);
+        }
+    }
+
+    const hora = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+    io.emit('new_message', {
+        sender: numLimpo || 'Site-Chat',
+        text: `[Transbordo Site] ${nome || 'Visitante'} (${segmento || '-'}) - ${numLimpo || telefone || '-'}`,
+        time: hora
+    });
+
+    res.json({ success: true, enviadoWhatsapp });
 });
 
 function carregarBloqueados() {
@@ -1677,11 +1686,13 @@ server.listen(PORT, () => {
     carregarHistoricoEmDisco();
     connectToWhatsApp();
 
-    const url = `http://localhost:${PORT}`;
-    const startCommand = process.platform === 'win32'
-        ? `start ${url}`
-        : process.platform === 'darwin'
-            ? `open ${url}`
-            : `xdg-open ${url}`;
-    exec(startCommand);
+    if (process.env.NO_BROWSER !== 'true') {
+        const url = `http://localhost:${PORT}`;
+        const startCommand = process.platform === 'win32'
+            ? `start ${url}`
+            : process.platform === 'darwin'
+                ? `open ${url}`
+                : `xdg-open ${url}`;
+        exec(startCommand);
+    }
 });
