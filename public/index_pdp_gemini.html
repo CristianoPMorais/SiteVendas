@@ -1,0 +1,1083 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digitavia | Agentes Autônomos de IA para Advocacia, Comércio e Drogarias no WhatsApp</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 88 64' fill='none'%3E%3Cdefs%3E%3ClinearGradient id='digFav' x1='14' y1='8' x2='72' y2='56' gradientUnits='userSpaceOnUse'%3E%3Cstop offset='0%25' stop-color='%230EA5E9'/%3E%3Cstop offset='55%25' stop-color='%232563EB'/%3E%3Cstop offset='100%25' stop-color='%234F46E5'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect x='10' y='9' width='7' height='7' rx='1.5' fill='%2338BDF8'/%3E%3Crect x='6' y='18' width='7' height='7' rx='1.5' fill='%230284C7'/%3E%3Crect x='4' y='27' width='7' height='7' rx='1.5' fill='%232563EB'/%3E%3Cpath d='M27 11H46C61.464 11 74 20.402 74 32C74 43.598 61.464 53 46 53H16L22.5 39H36.5L32.5 43.5H45.5C54.6127 43.5 62 38.3513 62 32C62 25.6487 54.6127 20.5 45.5 20.5H23L27 11Z' fill='url(%23digFav)'/%3E%3C/svg%3E">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #f8fafc;
+            color: #0f172a;
+        }
+        .card-surface {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.05);
+        }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 9999px; }
+    </style>
+</head>
+<body class="antialiased selection:bg-blue-600 selection:text-white overflow-x-hidden">
+
+    <!-- Barra Superior -->
+    <div class="bg-slate-900 text-slate-200 text-xs py-2.5 px-4">
+        <div class="container mx-auto max-w-7xl flex flex-wrap items-center justify-between gap-2">
+            <span class="font-medium">⚡ Implantação assistida em até 48h • Triagem Jurídica, Comércio & Drogarias 24/7</span>
+            <div class="flex items-center gap-4">
+                <span class="inline-flex items-center gap-1.5 text-emerald-400 font-semibold">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                    Digitavia IA Online • <span id="status-rotacao-topo">rotação ativa (slot #1/3)</span>
+                </span>
+                <button type="button" onclick="abrirModalContato('Suporte & Implantação')" class="underline hover:text-white transition">
+                    Falar com especialista
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navbar Fixa -->
+    <header class="sticky top-0 z-40 bg-white/95 backdrop-blur border-b border-slate-200">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl h-20 flex items-center justify-between gap-4">
+            <a href="#" class="flex items-center shrink-0">
+                <div class="flex items-center gap-3 leading-none">
+    <svg class="h-11 w-auto shrink-0" viewBox="0 0 88 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Digitavia">
+        <defs>
+            <linearGradient id="digGradHeader" x1="14" y1="8" x2="72" y2="56" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#0EA5E9"/>
+                <stop offset="55%" stop-color="#2563EB"/>
+                <stop offset="100%" stop-color="#4F46E5"/>
+            </linearGradient>
+        </defs>
+        <!-- Pixels superiores esquerdos do D -->
+        <rect x="10" y="9" width="7" height="7" rx="1.5" fill="#38BDF8"/>
+        <rect x="6" y="18" width="7" height="7" rx="1.5" fill="#0284C7"/>
+        <rect x="4" y="27" width="7" height="7" rx="1.5" fill="#2563EB"/>
+        <!-- Letra D estilizada -->
+        <path d="M27 11H46C61.464 11 74 20.402 74 32C74 43.598 61.464 53 46 53H16L22.5 39H36.5L32.5 43.5H45.5C54.6127 43.5 62 38.3513 62 32C62 25.6487 54.6127 20.5 45.5 20.5H23L27 11Z" fill="url(#digGradHeader)"/>
+    </svg>
+    <div class="flex flex-col">
+        <div class="text-xl sm:text-2xl font-extrabold tracking-tight text-slate-950">
+            Digita<span class="text-indigo-600">v</span>ia
+        </div>
+        <div class="text-[9px] font-semibold tracking-[0.2em] text-slate-500 uppercase mt-0.5">
+            Soluções Digitais
+        </div>
+        <div class="text-[10px] italic text-slate-500 mt-0.5 hidden sm:block">
+            Tecnologia que simplifica.
+        </div>
+    </div>
+</div>
+            </a>
+
+            <div class="hidden lg:flex flex-1 max-w-md mx-4">
+                <input id="busca-solucao" type="text" oninput="filtrarSolucoes()" placeholder="Buscar módulo ou plano (ex: jurídico, áudio, pro, scale)..."
+                    class="w-full bg-slate-100 border border-slate-200 rounded-xl px-4 py-2 text-xs sm:text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:border-blue-600 focus:bg-white transition">
+            </div>
+
+            <nav class="hidden md:flex items-center space-x-6 text-sm font-semibold text-slate-600">
+                <a href="#produto-detalhe" class="hover:text-blue-600 transition">Solução</a>
+                <a href="#tecnologia" class="hover:text-blue-600 transition">Tecnologia</a>
+                <a href="#planos" class="hover:text-blue-600 transition">Planos</a>
+                <a href="#faq" class="hover:text-blue-600 transition">Dúvidas</a>
+            </nav>
+
+            <button type="button" onclick="abrirModalContato('Demonstração Geral')" class="bg-blue-600 hover:bg-blue-700 text-white text-xs sm:text-sm font-bold px-4 sm:px-5 py-2.5 rounded-xl transition shrink-0">
+                Agendar Demo
+            </button>
+        </div>
+    </header>
+
+    <!-- Breadcrumb -->
+    <div class="bg-white border-b border-slate-100">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl py-3 text-xs text-slate-500 flex items-center gap-2">
+            <a href="#" class="hover:text-blue-600">Início</a>
+            <span>/</span>
+            <a href="#nichos" class="hover:text-blue-600">Agentes Autônomos</a>
+            <span>/</span>
+            <span id="breadcrumb-variante" class="text-slate-800 font-semibold">Plano Pro Multimodal — 1 WhatsApp + Áudio & Foto</span>
+        </div>
+    </div>
+
+    <!-- 1) VITRINE PRINCIPAL DE PRODUTO / CONFIGURAÇÃO -->
+    <main id="produto-detalhe" class="py-10 lg:py-14">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-start">
+
+                <!-- Coluna Esquerda: Galeria / Preview do Sistema -->
+                <div class="lg:col-span-7 space-y-4">
+                    <div class="card-surface rounded-2xl p-6 sm:p-8">
+                        <div class="flex items-center justify-between mb-4">
+                            <span id="badge-sku" class="text-xs font-mono font-semibold text-slate-500 bg-slate-100 px-3 py-1 rounded-lg">
+                                SKU: DIG-PRO-MULTIMODAL
+                            </span>
+                            <span class="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-3 py-1 rounded-full">
+                                <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                                Pronta Implantação
+                            </span>
+                        </div>
+
+                        <!-- Visualizador Interativo do Painel & Fluxo -->
+                        <div id="preview-stage" class="rounded-2xl bg-slate-950 text-white p-6 sm:p-8 border border-slate-800">
+                            <div class="flex items-center justify-between border-b border-slate-800 pb-4 mb-5">
+                                <div class="flex items-center gap-2.5">
+                                    <span class="w-3 h-3 rounded-full bg-rose-500"></span>
+                                    <span class="w-3 h-3 rounded-full bg-amber-400"></span>
+                                    <span class="w-3 h-3 rounded-full bg-emerald-500"></span>
+                                    <span id="preview-titulo-janela" class="ml-2 text-xs font-mono text-slate-400">digitavia-command-center • whatsapp-agente</span>
+                                </div>
+                                <span class="text-[11px] font-mono text-blue-400 bg-blue-950/60 border border-blue-800/50 px-2.5 py-0.5 rounded">
+                                    Resposta &lt; 4s
+                                </span>
+                            </div>
+
+                            <div class="space-y-3.5 text-xs sm:text-sm">
+                                <div class="bg-slate-900 border border-slate-800 rounded-xl p-3.5 max-w-[85%]">
+                                    <span class="block text-[10px] font-mono text-slate-400 mb-1">Cliente • Áudio (0:24) + Foto de Documento</span>
+                                    <p id="preview-msg-cliente" class="text-slate-200">
+                                        "Oi, mandei um áudio explicando meu caso e a foto da notificação. Vocês atendem hoje ainda?"
+                                    </p>
+                                </div>
+
+                                <div class="bg-blue-600/20 border border-blue-500/40 rounded-xl p-3.5 max-w-[88%] ml-auto">
+                                    <span class="block text-[10px] font-mono text-blue-300 mb-1">Digitavia • Contexto & Triagem em Tempo Real</span>
+                                    <p id="preview-msg-ia" class="text-slate-100">
+                                        "Olá! Já transcrevi seu áudio e analisei a notificação enviada. Vou te fazer 2 perguntas rápidas para organizar seu atendimento e já encaminhar para nossa equipe."
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-3 gap-3 mt-6 pt-5 border-t border-slate-800 text-center">
+                                <div class="bg-slate-900/80 rounded-xl p-3 border border-slate-800/80">
+                                    <div id="spec-latencia" class="text-base sm:text-lg font-extrabold text-blue-400">&lt; 4s</div>
+                                    <div class="text-[11px] text-slate-400">Tempo médio</div>
+                                </div>
+                                <div class="bg-slate-900/80 rounded-xl p-3 border border-slate-800/80">
+                                    <div id="spec-midia" class="text-base sm:text-lg font-extrabold text-emerald-400">Áudio + Foto</div>
+                                    <div class="text-[11px] text-slate-400">Leitura nativa</div>
+                                </div>
+                                <div class="bg-slate-900/80 rounded-xl p-3 border border-slate-800/80">
+                                    <div id="spec-canais" class="text-base sm:text-lg font-extrabold text-indigo-400">1 Número</div>
+                                    <div class="text-[11px] text-slate-400">Painel incluso</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Miniaturas / Modos de Visualização -->
+                        <div class="grid grid-cols-3 gap-3 mt-4">
+                            <button type="button" onclick="mudarVisualizacaoPreview('triagem')" class="p-3 rounded-xl border border-blue-600 bg-blue-50/70 text-left transition">
+                                <div class="text-xs font-bold text-slate-900">1. Triagem & Áudio</div>
+                                <div class="text-[11px] text-slate-600">Transcrição e qualificação</div>
+                            </button>
+                            <button type="button" onclick="mudarVisualizacaoPreview('transbordo')" class="p-3 rounded-xl border border-slate-200 hover:border-blue-400 bg-white text-left transition">
+                                <div class="text-xs font-bold text-slate-900">2. Transbordo Humano</div>
+                                <div class="text-[11px] text-slate-600">Pausa automática da IA</div>
+                            </button>
+                            <button type="button" onclick="mudarVisualizacaoPreview('painel')" class="p-3 rounded-xl border border-slate-200 hover:border-blue-400 bg-white text-left transition">
+                                <div class="text-xs font-bold text-slate-900">3. Command Center</div>
+                                <div class="text-[11px] text-slate-600">Controle e bloqueio ao vivo</div>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Especificações Técnicas Resumidas -->
+                    <div class="card-surface rounded-2xl p-6">
+                        <h2 class="text-base font-extrabold text-slate-900 mb-4">Especificações Técnicas da Arquitetura</h2>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs sm:text-sm">
+                            <div class="flex justify-between py-2 border-b border-slate-100">
+                                <span class="text-slate-500">Canal Principal</span>
+                                <span class="font-semibold text-slate-900">WhatsApp (QR Code)</span>
+                            </div>
+                            <div class="flex justify-between py-2 border-b border-slate-100">
+                                <span class="text-slate-500">Agrupamento de Mensagens</span>
+                                <span class="font-semibold text-slate-900">Debounce Inteligente</span>
+                            </div>
+                            <div class="flex justify-between py-2 border-b border-slate-100">
+                                <span class="text-slate-500">Entradas Multimídia</span>
+                                <span class="font-semibold text-slate-900">Texto, Áudio e Imagem</span>
+                            </div>
+                            <div class="flex justify-between py-2 border-b border-slate-100">
+                                <span class="text-slate-500">Resiliência de API</span>
+                                <span class="font-semibold text-slate-900">Rotação Automática de Chaves</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Coluna Direita: Configuração, Preço e Compra/Demo -->
+                <div class="lg:col-span-5 space-y-6">
+                    <div class="card-surface rounded-2xl p-6 sm:p-7 space-y-6">
+                        <div>
+                            <span class="text-xs font-bold uppercase tracking-wider text-blue-600">Digitavia • Agente Autônomo de IA</span>
+                            <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-1 leading-tight">
+                                Digitavia — Atendimento & Triagem Inteligente no WhatsApp
+                            </h1>
+                            <p class="text-xs sm:text-sm text-slate-600 mt-3 leading-relaxed">
+                                Esqueça menus engessados de "digite 1 ou 2". Agente humanizado que entende contexto, transcreve áudios, lê imagens e organiza o atendimento para advocacia, comércio e drogarias 24/7.
+                            </p>
+                        </div>
+
+                        <!-- Bloco de Preço Dinâmico -->
+                        <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4">
+                            <div class="flex items-baseline justify-between gap-2">
+                                <div>
+                                    <span class="text-xs text-slate-500 block">Assinatura Mensal</span>
+                                    <span class="text-3xl font-extrabold text-slate-900" id="preco-plano-ativo">R$ 497/mês</span>
+                                </div>
+                                <span class="text-xs font-semibold text-emerald-700 bg-emerald-100 px-2.5 py-1 rounded-lg">
+                                    Implantação incluída
+                                </span>
+                            </div>
+                            <p id="descricao-variante-ativa" class="text-xs text-slate-600 mt-2">
+                                Compreende áudios e imagens, script jurídico, comercial ou drogaria, Command Center completo e rotação automática de chaves.
+                            </p>
+                        </div>
+
+                        <!-- Seletor de Plano / Configuração -->
+                        <div>
+                            <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-2.5">
+                                1. Selecione o Plano / Configuração
+                            </label>
+                            <div class="grid grid-cols-1 gap-2.5" id="seletor-planos">
+                                <button type="button" data-plano="start" onclick="selecionarVariante('start')" class="plano-btn w-full text-left p-3.5 rounded-xl border border-slate-200 hover:border-blue-500 transition flex items-center justify-between">
+                                    <div>
+                                        <div class="text-sm font-bold text-slate-900">Start Essencial</div>
+                                        <div class="text-xs text-slate-500">1 WhatsApp • Atendimento 24/7 • Command Center básico</div>
+                                    </div>
+                                    <span class="text-sm font-extrabold text-slate-900">R$ 297</span>
+                                </button>
+
+                                <button type="button" data-plano="pro" onclick="selecionarVariante('pro')" class="plano-btn w-full text-left p-3.5 rounded-xl border-2 border-blue-600 bg-blue-50/50 transition flex items-center justify-between">
+                                    <div>
+                                        <div class="text-sm font-bold text-slate-900 flex items-center gap-2">
+                                            Pro Multimodal
+                                            <span class="text-[10px] uppercase bg-blue-600 text-white px-2 py-0.5 rounded-full">Mais escolhido</span>
+                                        </div>
+                                        <div class="text-xs text-slate-600">1 WhatsApp • Áudio e Imagem • Script sob medida</div>
+                                    </div>
+                                    <span class="text-sm font-extrabold text-blue-700">R$ 497</span>
+                                </button>
+
+                                <button type="button" data-plano="scale" onclick="selecionarVariante('scale')" class="plano-btn w-full text-left p-3.5 rounded-xl border border-slate-200 hover:border-blue-500 transition flex items-center justify-between">
+                                    <div>
+                                        <div class="text-sm font-bold text-slate-900">Business Scale</div>
+                                        <div class="text-xs text-slate-500">Até 3 Números • Base em PDFs • Escala multiequipe</div>
+                                    </div>
+                                    <span class="text-sm font-extrabold text-slate-900">R$ 897</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Seletor de Foco / Segmento -->
+                        <div>
+                            <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-2">
+                                2. Foco Operacional do Agente
+                            </label>
+                            <div class="grid grid-cols-3 gap-2">
+                                <button type="button" id="foco-juridico" onclick="selecionarFoco('Escritório de Advocacia')" class="foco-btn py-2.5 px-2.5 rounded-xl border border-slate-200 text-xs font-bold text-slate-700 hover:border-blue-500 transition">
+                                    ⚖️ Advocacia
+                                </button>
+                                <button type="button" id="foco-comercio" onclick="selecionarFoco('Comércio / Loja / Varejo')" class="foco-btn py-2.5 px-2.5 rounded-xl border border-slate-200 text-xs font-bold text-slate-700 hover:border-blue-500 transition">
+                                    🛍️ Comércio
+                                </button>
+                                <button type="button" id="foco-drogaria" onclick="selecionarFoco('Drogaria / Farmácia')" class="foco-btn py-2.5 px-2.5 rounded-xl border border-slate-200 text-xs font-bold text-slate-700 hover:border-blue-500 transition">
+                                    💊 Drogaria
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Ações Principais -->
+                        <div class="space-y-2.5 pt-1">
+                            <button type="button" onclick="abrirModalContatoComSelecao()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3.5 px-6 rounded-xl text-sm transition shadow-md">
+                                🚀 Contratar / Agendar Implantação
+                            </button>
+                            <button type="button" onclick="abrirAssistenteGemini()" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-3 px-6 rounded-xl text-xs sm:text-sm transition flex items-center justify-center gap-2">
+                                <span>✨</span> Tirar Dúvidas com Digitavia IA Online
+                            </button>
+                        </div>
+
+                        <div class="border-t border-slate-100 pt-4 space-y-2 text-xs text-slate-600">
+                            <div class="flex items-center gap-2"><span class="text-emerald-600 font-bold">✓</span> Mantém seu número atual de WhatsApp</div>
+                            <div class="flex items-center gap-2"><span class="text-emerald-600 font-bold">✓</span> Pausa automática quando o cliente pede humano</div>
+                            <div class="flex items-center gap-2"><span class="text-emerald-600 font-bold">✓</span> Rotação automática entre chaves no servidor</div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <!-- 2) DIFERENCIAIS TECNOLÓGICOS -->
+    <section id="tecnologia" class="py-16 bg-white border-t border-slate-200">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
+            <div class="max-w-3xl mb-12">
+                <span class="text-xs font-bold uppercase tracking-widest text-blue-600">Engenharia de Ponta</span>
+                <h2 class="text-2xl sm:text-4xl font-extrabold text-slate-900 mt-1 mb-3">
+                    Por que os Agentes da Digitavia são diferentes de tudo que você já viu?
+                </h2>
+                <p class="text-sm sm:text-base text-slate-600">
+                    Arquitetura focada em atendimento natural, leitura de mídia, rotação de chaves e controle operacional em tempo real.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" id="lista-diferenciais">
+                <div class="card-surface p-6 rounded-2xl">
+                    <div class="w-11 h-11 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center text-xl mb-4">🧠</div>
+                    <h3 class="text-base font-bold text-slate-900 mb-2">Debounce Inteligente</h3>
+                    <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                        Aguarda o cliente terminar de enviar mensagens picadas para responder de forma única e coesa.
+                    </p>
+                </div>
+
+                <div class="card-surface p-6 rounded-2xl">
+                    <div class="w-11 h-11 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-xl mb-4">🎙️</div>
+                    <h3 class="text-base font-bold text-slate-900 mb-2">Ouve Áudios e Lê Fotos</h3>
+                    <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                        Transcreve áudios no WhatsApp e analisa imagens de documentos, receitas, embalagens ou comprovantes.
+                    </p>
+                </div>
+
+                <div class="card-surface p-6 rounded-2xl">
+                    <div class="w-11 h-11 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-xl mb-4">🤝</div>
+                    <h3 class="text-base font-bold text-slate-900 mb-2">Transbordo Humano</h3>
+                    <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                        Quando o cliente pede atendimento humano, a IA pausa automaticamente para a equipe assumir.
+                    </p>
+                </div>
+
+                <div class="card-surface p-6 rounded-2xl">
+                    <div class="w-11 h-11 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center text-xl mb-4">🔄</div>
+                    <h3 class="text-base font-bold text-slate-900 mb-2">Rotação de Chaves API</h3>
+                    <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                        Alterna automaticamente entre múltiplas chaves configuradas no sistema se houver erro HTTP, limite de cota ou falha.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3) SOLUÇÕES POR NICHO -->
+    <section id="nichos" class="py-16 border-t border-slate-200">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
+            <div class="max-w-3xl mb-12">
+                <span class="text-xs font-bold uppercase tracking-widest text-blue-600">Especialização Vertical</span>
+                <h2 class="text-2xl sm:text-4xl font-extrabold text-slate-900 mt-1 mb-3">
+                    Treinado sob medida para a realidade do seu negócio
+                </h2>
+                <p class="text-sm sm:text-base text-slate-600">
+                    Configuramos o roteiro, os critérios de qualificação e o fluxo de transbordo para cada operação.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <div class="card-surface rounded-2xl p-8 flex flex-col justify-between">
+                    <div>
+                        <span class="inline-block px-3 py-1 rounded-lg bg-blue-50 text-blue-700 text-xs font-bold uppercase">
+                            ⚖️ Jurídico & Escritórios
+                        </span>
+                        <h3 class="text-xl font-extrabold text-slate-900 mt-4 mb-3">
+                            Triagem & Qualificação Jurídica
+                        </h3>
+                        <p class="text-sm text-slate-600 leading-relaxed mb-6">
+                            Acolhe o potencial cliente, coleta os fatos principais e organiza o contexto para o advogado conduzir o atendimento.
+                        </p>
+                    </div>
+                    <button type="button" onclick="abrirModalContato('Plano Advocacia')" class="w-full py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm transition">
+                        Solicitar para Escritório →
+                    </button>
+                </div>
+
+                <div class="card-surface rounded-2xl p-8 flex flex-col justify-between">
+                    <div>
+                        <span class="inline-block px-3 py-1 rounded-lg bg-emerald-50 text-emerald-700 text-xs font-bold uppercase">
+                            🛍️ Comércio & Lojas
+                        </span>
+                        <h3 class="text-xl font-extrabold text-slate-900 mt-4 mb-3">
+                            Consultor de Vendas & Atendimento
+                        </h3>
+                        <p class="text-sm text-slate-600 leading-relaxed mb-6">
+                            Responde dúvidas de produtos, condições e horários fora do expediente, encaminhando leads para a equipe comercial.
+                        </p>
+                    </div>
+                    <button type="button" onclick="abrirModalContato('Plano Comércio')" class="w-full py-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-sm transition">
+                        Solicitar para Comércio →
+                    </button>
+                </div>
+
+                <div class="card-surface rounded-2xl p-8 flex flex-col justify-between">
+                    <div>
+                        <span class="inline-block px-3 py-1 rounded-lg bg-indigo-50 text-indigo-700 text-xs font-bold uppercase">
+                            💊 Drogarias & Farmácias
+                        </span>
+                        <h3 class="text-xl font-extrabold text-slate-900 mt-4 mb-3">
+                            Atendimento 24/7 & Triagem de Pedidos
+                        </h3>
+                        <p class="text-sm text-slate-600 leading-relaxed mb-6">
+                            Atende em picos de balcão, noites e fins de semana, lê fotos de receitas/embalagens e transfere para a equipe quando necessário.
+                        </p>
+                    </div>
+                    <button type="button" onclick="abrirModalContato('Plano Drogaria')" class="w-full py-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-sm transition">
+                        Solicitar para Drogaria →
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 4) PLANOS E INVESTIMENTO -->
+    <section id="planos" class="py-16 bg-white border-t border-slate-200">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
+            <div class="text-center max-w-3xl mx-auto mb-12">
+                <span class="text-xs font-bold uppercase tracking-widest text-blue-600">Planos & Implantação</span>
+                <h2 class="text-2xl sm:text-4xl font-extrabold text-slate-900 mt-1 mb-3">
+                    Escolha o plano ideal para escalar seu atendimento
+                </h2>
+                <p class="text-sm sm:text-base text-slate-600">
+                    Implantação assistida pela equipe Digitavia: entregamos seu agente configurado, conectado e pronto para operar.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+                <div class="card-surface rounded-2xl p-7 flex flex-col justify-between">
+                    <div>
+                        <h3 class="text-lg font-extrabold text-slate-900">Start Essencial</h3>
+                        <p class="text-xs text-slate-500 mt-1">Ideal para lojas locais e autônomos.</p>
+                        <div class="my-5">
+                            <span class="text-xs text-slate-500">R$</span>
+                            <span class="text-4xl font-extrabold text-slate-900">297</span>
+                            <span class="text-xs text-slate-500">/mês</span>
+                        </div>
+                        <ul class="space-y-2.5 text-sm text-slate-700 border-t border-slate-100 pt-5">
+                            <li>✓ 1 Número de WhatsApp</li>
+                            <li>✓ Atendimento 24/7 com IA</li>
+                            <li>✓ Command Center básico</li>
+                        </ul>
+                    </div>
+                    <button type="button" onclick="abrirModalContato('Plano Start Essencial')" class="mt-7 w-full py-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-900 font-bold text-sm transition">
+                        Contratar Start
+                    </button>
+                </div>
+
+                <div class="card-surface rounded-2xl p-7 flex flex-col justify-between border-2 border-blue-600 relative">
+                    <span class="absolute -top-3 left-1/2 -translate-x-1/2 bg-blue-600 text-white text-[10px] font-extrabold uppercase tracking-wider px-3 py-1 rounded-full">
+                        Mais Escolhido
+                    </span>
+                    <div>
+                        <h3 class="text-xl font-extrabold text-slate-900">Pro Multimodal</h3>
+                        <p class="text-xs text-blue-700 font-medium mt-1">Completo para escritórios, comércios e drogarias.</p>
+                        <div class="my-5">
+                            <span class="text-xs text-slate-500">R$</span>
+                            <span class="text-4xl font-extrabold text-slate-900">497</span>
+                            <span class="text-xs text-slate-500">/mês</span>
+                        </div>
+                        <ul class="space-y-2.5 text-sm text-slate-700 border-t border-slate-100 pt-5">
+                            <li>✓ <strong>Compreende Áudios e Imagens</strong></li>
+                            <li>✓ Script Jurídico, Comercial ou Drogaria</li>
+                            <li>✓ Command Center Completo</li>
+                            <li>✓ Rotação automática de Chaves API</li>
+                        </ul>
+                    </div>
+                    <button type="button" onclick="abrirModalContato('Plano Pro Multimodal')" class="mt-7 w-full py-3.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm transition">
+                        Começar com o Pro →
+                    </button>
+                </div>
+
+                <div class="card-surface rounded-2xl p-7 flex flex-col justify-between">
+                    <div>
+                        <h3 class="text-lg font-extrabold text-slate-900">Business Scale</h3>
+                        <p class="text-xs text-slate-500 mt-1">Para bancas, franquias e redes.</p>
+                        <div class="my-5">
+                            <span class="text-xs text-slate-500">R$</span>
+                            <span class="text-4xl font-extrabold text-slate-900">897</span>
+                            <span class="text-xs text-slate-500">/mês</span>
+                        </div>
+                        <ul class="space-y-2.5 text-sm text-slate-700 border-t border-slate-100 pt-5">
+                            <li>✓ Até 3 Números Independentes</li>
+                            <li>✓ Tudo do Plano Pro</li>
+                            <li>✓ Base de Conhecimento em PDFs</li>
+                        </ul>
+                    </div>
+                    <button type="button" onclick="abrirModalContato('Plano Business Scale')" class="mt-7 w-full py-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-sm transition">
+                        Falar com Especialista
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5) FAQ -->
+    <section id="faq" class="py-16 border-t border-slate-200">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-4xl">
+            <div class="text-center mb-10">
+                <span class="text-xs font-bold uppercase tracking-widest text-blue-600">Perguntas Frequentes</span>
+                <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-1">
+                    Tire suas dúvidas antes de automatizar
+                </h2>
+            </div>
+
+            <div class="space-y-3">
+                <div class="card-surface rounded-2xl overflow-hidden">
+                    <button type="button" onclick="toggleFaq(1)" class="w-full p-5 text-left flex justify-between items-center font-bold text-sm sm:text-base text-slate-900">
+                        <span>Preciso trocar meu número de WhatsApp atual?</span>
+                        <span id="faq-icon-1" class="text-blue-600 font-mono text-lg">+</span>
+                    </button>
+                    <div id="faq-body-1" class="hidden px-5 pb-5 text-xs sm:text-sm text-slate-600 leading-relaxed border-t border-slate-100 pt-3">
+                        Não. Você utiliza o mesmo número atual conectando via QR Code no Command Center e acompanha as conversas normalmente.
+                    </div>
+                </div>
+
+                <div class="card-surface rounded-2xl overflow-hidden">
+                    <button type="button" onclick="toggleFaq(2)" class="w-full p-5 text-left flex justify-between items-center font-bold text-sm sm:text-base text-slate-900">
+                        <span>Como funciona a rotação automática de chaves API?</span>
+                        <span id="faq-icon-2" class="text-blue-600 font-mono text-lg">+</span>
+                    </button>
+                    <div id="faq-body-2" class="hidden px-5 pb-5 text-xs sm:text-sm text-slate-600 leading-relaxed border-t border-slate-100 pt-3">
+                        A Digitavia gerencia automaticamente o rodízio de chaves no sistema e alterna em caso de erro de cota ou falha temporária, sem exigir que o cliente informe chave alguma.
+                    </div>
+                </div>
+
+                <div class="card-surface rounded-2xl overflow-hidden">
+                    <button type="button" onclick="toggleFaq(3)" class="w-full p-5 text-left flex justify-between items-center font-bold text-sm sm:text-base text-slate-900">
+                        <span>Como funciona quando eu mesmo quero assumir a conversa?</span>
+                        <span id="faq-icon-3" class="text-blue-600 font-mono text-lg">+</span>
+                    </button>
+                    <div id="faq-body-3" class="hidden px-5 pb-5 text-xs sm:text-sm text-slate-600 leading-relaxed border-t border-slate-100 pt-3">
+                        Quando o cliente pede atendimento humano, a IA pausa automaticamente naquele chat. Você também pode pausar, bloquear ou assumir direto pelo painel ou comando.
+                    </div>
+                </div>
+
+                <div class="card-surface rounded-2xl overflow-hidden">
+                    <button type="button" onclick="toggleFaq(4)" class="w-full p-5 text-left flex justify-between items-center font-bold text-sm sm:text-base text-slate-900">
+                        <span>Em quanto tempo o agente fica pronto para operar?</span>
+                        <span id="faq-icon-4" class="text-blue-600 font-mono text-lg">+</span>
+                    </button>
+                    <div id="faq-body-4" class="hidden px-5 pb-5 text-xs sm:text-sm text-slate-600 leading-relaxed border-t border-slate-100 pt-3">
+                        Em até 48 horas após a reunião de alinhamento, com roteiro configurado e ativação assistida.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 text-slate-400 py-10 text-center text-xs">
+        <div class="container mx-auto px-4 flex flex-col items-center space-y-2.5">
+            <div class="inline-flex items-center gap-2.5 bg-white text-slate-900 px-3.5 py-2 rounded-xl shadow-sm">
+    <svg class="h-8 w-auto shrink-0" viewBox="0 0 88 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Digitavia">
+        <defs>
+            <linearGradient id="digGradFooter" x1="14" y1="8" x2="72" y2="56" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#0EA5E9"/>
+                <stop offset="55%" stop-color="#2563EB"/>
+                <stop offset="100%" stop-color="#4F46E5"/>
+            </linearGradient>
+        </defs>
+        <rect x="10" y="9" width="7" height="7" rx="1.5" fill="#38BDF8"/>
+        <rect x="6" y="18" width="7" height="7" rx="1.5" fill="#0284C7"/>
+        <rect x="4" y="27" width="7" height="7" rx="1.5" fill="#2563EB"/>
+        <path d="M27 11H46C61.464 11 74 20.402 74 32C74 43.598 61.464 53 46 53H16L22.5 39H36.5L32.5 43.5H45.5C54.6127 43.5 62 38.3513 62 32C62 25.6487 54.6127 20.5 45.5 20.5H23L27 11Z" fill="url(#digGradFooter)"/>
+    </svg>
+    <div class="text-left leading-tight">
+        <div class="text-sm font-extrabold text-slate-950">Digita<span class="text-indigo-600">v</span>ia</div>
+        <div class="text-[8px] font-semibold tracking-[0.16em] text-slate-500 uppercase">Soluções Digitais</div>
+    </div>
+</div>
+            <p class="font-semibold text-slate-200">Digitavia — Soluções Digitais • Tecnologia que simplifica.</p>
+            <p>© 2026 Digitavia. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+    <!-- ASSISTENTE DIGITAVIA IA ONLINE (SEM SOLICITAR CHAVE AO CLIENTE) -->
+    <div id="gemini-chat-widget" class="fixed bottom-6 right-6 z-50 flex flex-col items-end">
+        <div id="gemini-chat-panel" class="hidden mb-3 w-[92vw] max-w-md bg-white border border-slate-200 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[78vh]">
+            <div class="bg-slate-900 text-white px-4 py-3.5 flex items-center justify-between">
+                <div class="flex items-center gap-2.5">
+                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                    <div>
+                        <div class="text-sm font-bold leading-tight">Digitavia • Agente IA Online</div>
+                        <div id="gemini-rotacao-badge" class="text-[11px] text-slate-300">Rotação automática ativa • Slot #1/3</div>
+                    </div>
+                </div>
+                <div class="flex items-center gap-1">
+                    <button type="button" onclick="rotacionarChaveManualmente()" title="Alternar chave do pool" class="text-[11px] bg-slate-800 hover:bg-slate-700 text-blue-300 font-semibold px-2 py-1 rounded">
+                        ↻ Rotacionar
+                    </button>
+                    <button type="button" onclick="fecharAssistenteGemini()" class="text-slate-300 hover:text-white text-sm font-bold px-2">✕</button>
+                </div>
+            </div>
+
+            <div id="gemini-mensagens" class="p-4 space-y-3 overflow-y-auto flex-1 bg-slate-50/60 text-xs sm:text-sm">
+                <div class="bg-white border border-slate-200 text-slate-800 rounded-2xl rounded-tl-sm p-3 max-w-[88%]">
+                    Olá! Sou o assistente da <strong>Digitavia</strong>. Como posso ajudar você hoje com nossos agentes autônomos no WhatsApp?
+                </div>
+            </div>
+
+            <form onsubmit="enviarMensagemGemini(event)" class="p-3 bg-white border-t border-slate-200 flex gap-2">
+                <input id="gemini-input-pergunta" type="text" required placeholder="Pergunte sobre planos, áudio, foto, drogaria..."
+                    class="flex-1 bg-slate-100 border border-slate-200 rounded-xl px-3.5 py-2 text-xs sm:text-sm text-slate-900 focus:outline-none focus:border-blue-600 focus:bg-white">
+                <button type="submit" id="gemini-btn-enviar" class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-4 py-2 rounded-xl text-xs sm:text-sm transition">
+                    Enviar
+                </button>
+            </form>
+        </div>
+
+        <button type="button" onclick="alternarAssistenteGemini()"
+            class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-3.5 rounded-full shadow-xl flex items-center gap-2.5 font-bold text-xs sm:text-sm transition hover:scale-105">
+            <span class="relative flex h-2.5 w-2.5">
+                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-300 opacity-75"></span>
+                <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-400"></span>
+            </span>
+            <span>Digitavia IA Online</span>
+        </button>
+    </div>
+
+    <!-- Modal de Contato / Contratação -->
+    <div id="modal-contato" class="fixed inset-0 bg-slate-950/75 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
+        <div class="bg-white border border-slate-200 w-full max-w-md rounded-2xl p-6 sm:p-7 shadow-2xl relative">
+            <button type="button" onclick="fecharModalContato()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-700 font-bold text-lg">✕</button>
+
+            <div class="mb-4">
+                <h3 class="font-extrabold text-lg text-slate-900">Solicitar Implantação / Demo — Digitavia</h3>
+                <p id="modal-interesse-badge" class="text-xs text-blue-600 font-semibold mt-0.5">Interesse: Plano Pro Multimodal</p>
+            </div>
+
+            <form onsubmit="enviarParaWhatsapp(event)" class="space-y-3.5">
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Seu Nome</label>
+                    <input id="lead-nome" type="text" required placeholder="Ex: Dr. Ricardo / Ana Paula" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-sm text-slate-900 focus:outline-none focus:border-blue-600">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Segmento do Negócio</label>
+                    <select id="lead-segmento" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-sm text-slate-900 focus:outline-none focus:border-blue-600">
+                        <option value="Escritório de Advocacia">⚖️ Escritório de Advocacia</option>
+                        <option value="Comércio / Loja / Varejo">🛍️ Comércio / Loja / Varejo</option>
+                        <option value="Drogaria / Farmácia">💊 Drogaria / Farmácia</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Seu WhatsApp (com DDD)</label>
+                    <input id="lead-telefone" type="tel" required placeholder="Ex: (62) 99999-9999" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-sm text-slate-900 focus:outline-none focus:border-blue-600">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Necessidade Principal</label>
+                    <textarea id="lead-dor" rows="3" required placeholder="Ex: Triagem de casos, atendimento fora do horário comercial..." class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-sm text-slate-900 focus:outline-none focus:border-blue-600"></textarea>
+                </div>
+                <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-xl text-sm transition">
+                    💬 Enviar Detalhes no WhatsApp
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const NUMERO_WHATSAPP_VENDAS = "556299657585";
+        const PLANOS_INFO = {
+            start: {
+                nome: "Start Essencial",
+                sku: "SKU: DIG-START-01",
+                preco: "R$ 297/mês",
+                breadcrumb: "Plano Start Essencial — 1 WhatsApp + Atendimento 24/7",
+                descricao: "1 número de WhatsApp, atendimento 24/7 com IA e Command Center básico para operações iniciais.",
+                canais: "1 Número"
+            },
+            pro: {
+                nome: "Pro Multimodal",
+                sku: "SKU: DIG-PRO-MULTIMODAL",
+                preco: "R$ 497/mês",
+                breadcrumb: "Plano Pro Multimodal — 1 WhatsApp + Áudio & Foto",
+                descricao: "Compreende áudios e imagens, script jurídico, comercial ou drogaria, Command Center completo e rotação automática de chaves.",
+                canais: "1 Número"
+            },
+            scale: {
+                nome: "Business Scale",
+                sku: "SKU: DIG-BUSINESS-SCALE",
+                preco: "R$ 897/mês",
+                breadcrumb: "Plano Business Scale — Até 3 Números + Base em PDFs",
+                descricao: "Até 3 números independentes, recursos multimídia completos e base de conhecimento em PDFs para equipes maiores.",
+                canais: "Até 3 Números"
+            }
+        };
+
+        let planoSelecionado = "pro";
+        let focoSelecionado = "Escritório de Advocacia";
+        let interesseAtual = "Plano Pro Multimodal";
+        const historicoGemini = [];
+
+        // Rotação de chaves gerenciada pelo servidor/sistema (nunca solicitada ao cliente)
+        let serverKeyCount = 3;
+        let activeKeyIndex = 0;
+        let cooldownUntil = 0;
+
+        function selecionarVariante(chave) {
+            if (!PLANOS_INFO[chave]) return;
+            planoSelecionado = chave;
+            const info = PLANOS_INFO[chave];
+
+            document.getElementById("badge-sku").textContent = info.sku;
+            document.getElementById("breadcrumb-variante").textContent = info.breadcrumb;
+            document.getElementById("preco-plano-ativo").textContent = info.preco;
+            document.getElementById("descricao-variante-ativa").textContent = info.descricao;
+            document.getElementById("spec-canais").textContent = info.canais;
+            interesseAtual = `${info.nome} (${focoSelecionado})`;
+
+            document.querySelectorAll(".plano-btn").forEach((btn) => {
+                const ativo = btn.getAttribute("data-plano") === chave;
+                btn.className = ativo
+                    ? "plano-btn w-full text-left p-3.5 rounded-xl border-2 border-blue-600 bg-blue-50/50 transition flex items-center justify-between"
+                    : "plano-btn w-full text-left p-3.5 rounded-xl border border-slate-200 hover:border-blue-500 transition flex items-center justify-between";
+            });
+        }
+
+        function selecionarFoco(foco) {
+            focoSelecionado = foco;
+            const info = PLANOS_INFO[planoSelecionado];
+            interesseAtual = `${info.nome} (${foco})`;
+
+            const btnJur = document.getElementById("foco-juridico");
+            const btnCom = document.getElementById("foco-comercio");
+            const btnDro = document.getElementById("foco-drogaria");
+            const base = "foco-btn py-2.5 px-2.5 rounded-xl border text-xs font-bold transition";
+            const ativo = "foco-btn py-2.5 px-2.5 rounded-xl border-2 border-blue-600 bg-blue-50 text-blue-800 text-xs font-bold transition";
+
+            btnJur.className = foco.includes("Advocacia") ? ativo : `${base} border-slate-200 text-slate-700 hover:border-blue-500`;
+            btnCom.className = foco.includes("Comércio") ? ativo : `${base} border-slate-200 text-slate-700 hover:border-blue-500`;
+            btnDro.className = foco.includes("Drogaria") ? ativo : `${base} border-slate-200 text-slate-700 hover:border-blue-500`;
+        }
+
+        function mudarVisualizacaoPreview(modo) {
+            const janela = document.getElementById("preview-titulo-janela");
+            const cli = document.getElementById("preview-msg-cliente");
+            const ia = document.getElementById("preview-msg-ia");
+
+            if (modo === "triagem") {
+                janela.textContent = "digitavia-command-center • triagem-multimodal";
+                cli.textContent = '"Oi, mandei um áudio explicando meu caso e a foto da notificação. Vocês atendem hoje ainda?"';
+                ia.textContent = '"Olá! Já transcrevi seu áudio e analisei a notificação enviada. Vou organizar as informações iniciais para nossa equipe."';
+            } else if (modo === "transbordo") {
+                janela.textContent = "digitavia-command-center • transbordo-humano";
+                cli.textContent = '"Preciso falar com um atendente humano para alinhar os detalhes finais."';
+                ia.textContent = '"Perfeito, pausei a resposta automática neste chat e sinalizei nossa equipe para assumir com você."';
+            } else {
+                janela.textContent = "digitavia-command-center • controle-ao-vivo";
+                cli.textContent = '"Qual o prazo de implantação e como funciona a rotação de chaves?"';
+                ia.textContent = '"A implantação ocorre em até 48h e a Digitavia alterna automaticamente entre chaves no servidor para manter o atendimento ativo."';
+            }
+        }
+
+        function abrirModalContato(interesse) {
+            interesseAtual = interesse;
+            document.getElementById("modal-interesse-badge").textContent = `Interesse: ${interesse}`;
+            const selectSeg = document.getElementById("lead-segmento");
+            const lower = interesse.toLowerCase();
+            if (lower.includes("advocacia")) selectSeg.value = "Escritório de Advocacia";
+            else if (lower.includes("comércio")) selectSeg.value = "Comércio / Loja / Varejo";
+            else if (lower.includes("drogaria")) selectSeg.value = "Drogaria / Farmácia";
+
+            const modal = document.getElementById("modal-contato");
+            modal.classList.remove("hidden");
+            modal.classList.add("flex");
+        }
+
+        function abrirModalContatoComSelecao() {
+            const info = PLANOS_INFO[planoSelecionado];
+            abrirModalContato(`${info.nome} (${info.preco}) — ${focoSelecionado}`);
+        }
+
+        function fecharModalContato() {
+            const modal = document.getElementById("modal-contato");
+            modal.classList.add("hidden");
+            modal.classList.remove("flex");
+        }
+
+        function enviarParaWhatsapp(event) {
+            event.preventDefault();
+            const nome = document.getElementById("lead-nome").value.trim();
+            const segmento = document.getElementById("lead-segmento").value;
+            const telefone = document.getElementById("lead-telefone").value.trim();
+            const dor = document.getElementById("lead-dor").value.trim();
+
+            const mensagem =
+                `Olá! Vim pelo site da *Digitavia*.\n\n` +
+                `*Nome:* ${nome}\n` +
+                `*Segmento:* ${segmento}\n` +
+                `*WhatsApp:* ${telefone}\n` +
+                `*Interesse:* ${interesseAtual}\n` +
+                `*Necessidade:* ${dor}`;
+
+            const url = `https://wa.me/${NUMERO_WHATSAPP_VENDAS}?text=${encodeURIComponent(mensagem)}`;
+            window.open(url, "_blank");
+            fecharModalContato();
+        }
+
+        function toggleFaq(id) {
+            const body = document.getElementById(`faq-body-${id}`);
+            const icon = document.getElementById(`faq-icon-${id}`);
+            if (body.classList.contains("hidden")) {
+                body.classList.remove("hidden");
+                icon.textContent = "−";
+            } else {
+                body.classList.add("hidden");
+                icon.textContent = "+";
+            }
+        }
+
+        function filtrarSolucoes() {
+            const termo = (document.getElementById("busca-solucao")?.value || "").toLowerCase().trim();
+            document.querySelectorAll(".plano-btn").forEach((btn) => {
+                const texto = btn.innerText.toLowerCase();
+                btn.style.opacity = !termo || texto.includes(termo) ? "1" : "0.45";
+            });
+        }
+
+        // =========================================================
+        // ✨ ASSISTENTE DIGITAVIA IA ONLINE (CONECTADO A /api/gemini)
+        // =========================================================
+        const SYSTEM_PROMPT_DIGITAVIA = `Você é o assistente virtual oficial da Digitavia (Agentes Autônomos de IA para Advocacia, Comércio e Drogarias no WhatsApp).
+Seu nome é Assistente Digitavia.
+Responda em português, de forma clara, natural, direta e prestativa, adaptando-se à pergunta do usuário (nunca repita sempre o mesmo texto pronto).
+Informações oficiais da Digitavia:
+- Planos mensais: Start Essencial (R$ 297/mês - 1 número, 24/7, Command Center básico), Pro Multimodal (R$ 497/mês - 1 número, ouve áudios e lê imagens, script jurídico, comercial ou drogaria, Command Center completo, rotação automática de chaves), Business Scale (R$ 897/mês - até 3 números, recursos do Pro, base de conhecimento em PDFs).
+- Recursos: Debounce inteligente (agrupa mensagens picadas), leitura de áudio e imagem, transbordo humano automático quando o cliente pede atendente, rotação automática de chaves no servidor e painel Command Center web.
+- Não precisa trocar o número atual de WhatsApp; conexão por QR Code.
+- Prazo de implantação: até 48h após reunião de alinhamento.
+- WhatsApp comercial para demonstração/contratação: (62) 99657-585.`;
+
+        function atualizarIndicadoresRotacao() {
+            const rotBadge = document.getElementById("gemini-rotacao-badge");
+            const topoLabel = document.getElementById("status-rotacao-topo");
+            const slotAtual = (activeKeyIndex % Math.max(1, serverKeyCount)) + 1;
+            const emCooldown = Date.now() < cooldownUntil;
+
+            if (rotBadge) {
+                rotBadge.textContent = emCooldown
+                    ? `Rotação automática • Slot #${slotAtual} em recuperação`
+                    : `Rotação automática ativa • Slot #${slotAtual}/${serverKeyCount}`;
+            }
+            if (topoLabel) {
+                topoLabel.textContent = `rotação ativa (slot #${slotAtual}/${serverKeyCount})`;
+            }
+        }
+
+        function rotacionarChaveManualmente() {
+            activeKeyIndex = (activeKeyIndex + 1) % Math.max(1, serverKeyCount);
+            atualizarIndicadoresRotacao();
+        }
+
+        function abrirAssistenteGemini() {
+            const panel = document.getElementById("gemini-chat-panel");
+            if (panel) {
+                panel.classList.remove("hidden");
+                document.getElementById("gemini-input-pergunta")?.focus();
+            }
+        }
+
+        function fecharAssistenteGemini() {
+            const panel = document.getElementById("gemini-chat-panel");
+            if (panel) panel.classList.add("hidden");
+        }
+
+        function alternarAssistenteGemini() {
+            const panel = document.getElementById("gemini-chat-panel");
+            if (!panel) return;
+            if (panel.classList.contains("hidden")) {
+                abrirAssistenteGemini();
+            } else {
+                fecharAssistenteGemini();
+            }
+        }
+
+        function adicionarMensagemChat(autor, texto) {
+            const container = document.getElementById("gemini-mensagens");
+            if (!container) return;
+
+            const bolha = document.createElement("div");
+            if (autor === "usuario") {
+                bolha.className = "bg-blue-600 text-white rounded-2xl rounded-tr-sm p-3 max-w-[85%] ml-auto";
+            } else {
+                bolha.className = "bg-white border border-slate-200 text-slate-800 rounded-2xl rounded-tl-sm p-3 max-w-[88%]";
+            }
+            bolha.textContent = texto;
+            container.appendChild(bolha);
+            container.scrollTop = container.scrollHeight;
+        }
+
+        let aguardandoDadosTransbordo = false;
+        let transbordoJaEnviado = false;
+        let dadosLeadAcumulados = { nome: "", segmento: "", telefone: "" };
+
+        function extrairDadosLeadTexto(texto) {
+            const raw = String(texto || "").trim();
+            const lower = raw.toLowerCase();
+
+            let segmento = "";
+            if (lower.includes("drogaria") || lower.includes("farmácia") || lower.includes("farmacia")) {
+                segmento = "Drogaria / Farmácia";
+            } else if (lower.includes("advoc") || lower.includes("juríd") || lower.includes("jurid") || lower.includes("escritório") || lower.includes("escritorio")) {
+                segmento = "Escritório de Advocacia";
+            } else if (lower.includes("comércio") || lower.includes("comercio") || lower.includes("loja") || lower.includes("varejo")) {
+                segmento = "Comércio / Loja / Varejo";
+            }
+
+            const matchesFone = raw.match(/(?:\+?55\s*)?(?:\(?\d{2}\)?\s*)?\d{4,5}[-\s]?\d{4}/g);
+            const telefone = matchesFone ? matchesFone[matchesFone.length - 1].trim() : "";
+
+            let nome = "";
+            const matchNome = raw.match(/(?:meu nome [ée]|sou(?:\s+o|\s+a)?|aqui [ée](?:\s+o|\s+a)?)\s+([A-ZÀ-Úa-zà-ú]+(?:\s+[A-ZÀ-Úa-zà-ú]+)?)/i);
+            if (matchNome && matchNome[1]) {
+                nome = matchNome[1].replace(/\b(sou|da|do|de|meu|whatsapp|fone|telefone)\b.*$/i, "").trim();
+            } else if (aguardandoDadosTransbordo && !telefone && !segmento && raw.length <= 45) {
+                nome = raw;
+            }
+
+            return { nome, segmento, telefone };
+        }
+
+        function adicionarMensagemEncaminhamentoChat(dados) {
+            const container = document.getElementById("gemini-mensagens");
+            if (!container) return;
+
+            const resumoTel = dados.telefone ? ` (${dados.telefone})` : "";
+            const resumoSeg = dados.segmento ? ` — ${dados.segmento}` : "";
+            const msgTexto = encodeURIComponent(
+                `Olá! Vim pelo chat do site da Digitavia e gostaria de falar com um atendente.${dados.nome ? ` Meu nome é ${dados.nome}` : ""}${resumoSeg}${resumoTel}.`
+            );
+            const linkWa = `https://wa.me/${NUMERO_WHATSAPP_VENDAS}?text=${msgTexto}`;
+
+            const box = document.createElement("div");
+            box.className = "bg-white border border-emerald-200 text-slate-800 rounded-2xl rounded-tl-sm p-3.5 max-w-[92%] space-y-2.5 shadow-sm";
+            box.innerHTML = `
+                <p class="text-xs sm:text-sm leading-relaxed">
+                    Perfeito, <strong>${dados.nome || "obrigado"}</strong>! Registrei seu encaminhamento${resumoTel}${resumoSeg} e avisei nossa equipe no WhatsApp.
+                </p>
+                <a href="${linkWa}" target="_blank" rel="noopener noreferrer"
+                    class="inline-flex items-center justify-center w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2 px-3 rounded-xl text-xs transition">
+                    💬 Abrir WhatsApp Agora (62) 99657-585
+                </a>
+            `;
+            container.appendChild(box);
+            container.scrollTop = container.scrollHeight;
+        }
+
+        async function dispararEncaminhamentoHumano(dados, ultimaMsg) {
+            if (transbordoJaEnviado) return;
+            transbordoJaEnviado = true;
+            aguardandoDadosTransbordo = false;
+
+            try {
+                await fetch("/api/transbordo-web", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        nome: dados.nome || "Visitante do Chat",
+                        segmento: dados.segmento || focoSelecionado,
+                        telefone: dados.telefone || "Não informado",
+                        necessidade: ultimaMsg,
+                        historico: historicoGemini
+                    })
+                });
+            } catch (_) {}
+
+            adicionarMensagemEncaminhamentoChat(dados);
+        }
+
+        async function enviarMensagemGemini(event) {
+            event.preventDefault();
+            const input = document.getElementById("gemini-input-pergunta");
+            const botao = document.getElementById("gemini-btn-enviar");
+            const pergunta = (input?.value || "").trim();
+            if (!pergunta) return;
+
+            adicionarMensagemChat("usuario", pergunta);
+            input.value = "";
+            if (botao) botao.disabled = true;
+
+            historicoGemini.push({
+                role: "user",
+                parts: [{ text: pergunta }]
+            });
+
+            const pLower = pergunta.toLowerCase();
+            const pediuHumano = ["humano", "atendente", "especialista", "pessoa", "falar com alguém", "falar com alguem", "whatsapp", "contato"].some(t => pLower.includes(t));
+            const extraido = extrairDadosLeadTexto(pergunta);
+
+            if (extraido.nome) dadosLeadAcumulados.nome = extraido.nome;
+            if (extraido.segmento) dadosLeadAcumulados.segmento = extraido.segmento;
+            if (extraido.telefone) dadosLeadAcumulados.telefone = extraido.telefone;
+
+            if (pediuHumano && !dadosLeadAcumulados.telefone) {
+                aguardandoDadosTransbordo = true;
+                const respostaSolicitacao =
+                    "Com certeza! Para eu encaminhar você ao nosso atendente e avisar a equipe no WhatsApp, informe seu **nome** e seu **WhatsApp com DDD** (ou clique no botão abaixo para ir direto ao WhatsApp).";
+
+                const container = document.getElementById("gemini-mensagens");
+                if (container) {
+                    const linkDireto = `https://wa.me/${NUMERO_WHATSAPP_VENDAS}?text=${encodeURIComponent("Olá! Vim pelo chat da Digitavia e gostaria de falar com um atendente.")}`;
+                    const bolha = document.createElement("div");
+                    bolha.className = "bg-white border border-slate-200 text-slate-800 rounded-2xl rounded-tl-sm p-3 max-w-[90%] space-y-2";
+                    bolha.innerHTML = `
+                        <p>Com certeza! Para encaminhar você ao nosso atendente e avisar a equipe no WhatsApp, informe seu <strong>nome</strong> e seu <strong>WhatsApp com DDD</strong>.</p>
+                        <a href="${linkDireto}" target="_blank" rel="noopener noreferrer"
+                            class="inline-flex items-center justify-center w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2 px-3 rounded-xl text-xs transition">
+                            💬 Falar Direto no WhatsApp (62) 99657-585
+                        </a>
+                    `;
+                    container.appendChild(bolha);
+                    container.scrollTop = container.scrollHeight;
+                }
+                historicoGemini.push({ role: "model", parts: [{ text: respostaSolicitacao }] });
+                if (botao) botao.disabled = false;
+                input?.focus();
+                return;
+            }
+
+            if ((aguardandoDadosTransbordo || pediuHumano) && (dadosLeadAcumulados.telefone || (dadosLeadAcumulados.nome && pediuHumano))) {
+                await dispararEncaminhamentoHumano(dadosLeadAcumulados, pergunta);
+                if (botao) botao.disabled = false;
+                input?.focus();
+                return;
+            }
+
+            try {
+                const resp = await fetch("/api/gemini", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        systemInstruction: SYSTEM_PROMPT_DIGITAVIA,
+                        contents: historicoGemini,
+                        keyIndex: activeKeyIndex
+                    })
+                });
+                const data = await resp.json();
+                if (typeof data.totalKeys === "number" && data.totalKeys > 0) {
+                    serverKeyCount = data.totalKeys;
+                }
+                if (typeof data.slotUsed === "number" && data.slotUsed > 0) {
+                    activeKeyIndex = data.slotUsed - 1;
+                }
+                atualizarIndicadoresRotacao();
+
+                const respostaTexto = data.text || "Não consegui gerar uma resposta no momento.";
+                historicoGemini.push({
+                    role: "model",
+                    parts: [{ text: respostaTexto }]
+                });
+                adicionarMensagemChat("ia", respostaTexto);
+            } catch (err) {
+                adicionarMensagemChat("ia", "Ocorreu um erro ao consultar o assistente. Tente novamente em instantes.");
+            } finally {
+                if (botao) botao.disabled = false;
+                input?.focus();
+            }
+        }
+
+        atualizarIndicadoresRotacao();
+        selecionarVariante("pro");
+        selecionarFoco("Escritório de Advocacia");
+    </script>
+</body>
+</html>

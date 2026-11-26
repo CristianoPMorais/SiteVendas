@@ -1,0 +1,1057 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel de Controle - AI Agent Command Center</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #030712;
+            background-image:
+                radial-gradient(at 0% 0%, rgba(30, 58, 138, 0.15) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(88, 28, 135, 0.15) 0px, transparent 50%);
+            background-attachment: fixed;
+        }
+        .glass-card {
+            background: rgba(17, 24, 39, 0.7);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: rgba(3, 7, 18, 0.5); }
+        ::-webkit-scrollbar-thumb { background: rgba(75, 85, 99, 0.5); border-radius: 9999px; }
+
+        #painel-config-card {
+            display: none;
+        }
+        #painel-config-card.show {
+            display: block;
+        }
+
+        @keyframes alertaPiscando {
+            0%, 100% {
+                opacity: 1;
+                box-shadow: 0 0 0 0 rgba(250, 204, 21, 0.8);
+            }
+            50% {
+                opacity: 0.82;
+                box-shadow: 0 0 26px 5px rgba(250, 204, 21, 0.5);
+            }
+        }
+        .alerta-aguardando-piscando {
+            animation: alertaPiscando 1.1s infinite ease-in-out;
+        }
+    </style>
+</head>
+<body class="text-gray-100 min-h-screen antialiased selection:bg-blue-500 selection:text-white">
+
+    <!-- Visão Principal: Command Center -->
+    <div id="command-center-view">
+        <!-- Tela de Acesso Protegido por Senha -->
+        <div id="auth-lock-screen" class="fixed inset-0 z-50 bg-gray-950/95 backdrop-blur-xl flex items-center justify-center p-4">
+            <div class="glass-card border border-gray-700/80 w-full max-w-md rounded-2xl p-7 shadow-2xl">
+                <div class="flex items-center gap-3.5 mb-5">
+                    <div class="w-12 h-12 rounded-2xl bg-blue-600/20 border border-blue-500/30 flex items-center justify-center text-2xl">
+                        🔒
+                    </div>
+                    <div>
+                        <h2 class="text-lg font-extrabold text-white">Acesso Restrito</h2>
+                        <p class="text-xs text-gray-400">Informe a senha para acessar o Command Center.</p>
+                    </div>
+                </div>
+
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Senha de Acesso</label>
+                        <input id="login-senha-input" type="password" placeholder="Digite sua senha..."
+                            onkeypress="if(event.key === 'Enter') realizarLoginPainel()"
+                            class="w-full bg-gray-950 border border-gray-700/80 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-blue-500 font-mono">
+                    </div>
+                    <p id="login-erro-msg" class="text-xs text-rose-400 font-medium hidden"></p>
+                    <button onclick="realizarLoginPainel()" class="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold py-3 rounded-xl text-sm transition shadow-lg shadow-blue-950/40">
+                        Desbloquear Painel
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Banner de Alerta Piscando Flutuante Fixo no Topo -->
+        <div id="banner-aguardando-humano"
+            class="hidden fixed top-4 left-1/2 -translate-x-1/2 z-40 w-[95%] max-w-6xl flex-col sm:flex-row items-start sm:items-center justify-between gap-4 rounded-2xl border-2 border-yellow-400 bg-[#2b240b]/95 px-5 py-3.5 shadow-[0_0_25px_rgba(250,204,21,0.35)] backdrop-blur-md alerta-aguardando-piscando">
+            <div class="flex items-center gap-3.5">
+                <span class="relative flex h-4 w-4 shrink-0">
+                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-yellow-300 opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-4 w-4 bg-yellow-400"></span>
+                </span>
+                <div>
+                    <p id="texto-banner-aguardando" class="text-sm sm:text-base font-extrabold text-yellow-300 tracking-wide">
+                        🚨 ATENÇÃO: HÁ CLIENTE AGUARDANDO ATENDIMENTO HUMANO!
+                    </p>
+                    <p id="subtexto-banner-aguardando" class="text-xs text-yellow-100/85 mt-0.5">
+                        Clique no número para abrir ou em "Atendido" para finalizar e bloquear o número.
+                    </p>
+                </div>
+            </div>
+            <div id="botoes-rapidos-aguardando" class="flex flex-wrap gap-2"></div>
+        </div>
+
+        <div class="container mx-auto p-4 sm:p-6 lg:p-8 max-w-7xl">
+            <!-- Header -->
+            <header class="flex flex-col sm:flex-row justify-between items-center mb-10 pb-6 border-b border-gray-800/80 gap-4">
+                <div class="flex items-center space-x-4">
+                    <div onclick="togglePainelConfig()" class="relative cursor-pointer group">
+                        <div class="absolute -inset-1 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl blur opacity-75 group-hover:opacity-100 transition animate-pulse"></div>
+                        <div class="relative w-14 h-14 bg-gray-900 border border-gray-700 rounded-2xl flex items-center justify-center shadow-xl group-hover:scale-105 transition text-blue-400">
+                            <svg class="w-8 h-8" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <rect width="18" height="10" x="3" y="11" rx="2"></rect>
+                                <circle cx="9" cy="16" r="1"></circle>
+                                <circle cx="15" cy="16" r="1"></circle>
+                                <path d="M12 11V7"></path>
+                                <path d="M7 7h10"></path>
+                                <circle cx="12" cy="5" r="1"></circle>
+                            </svg>
+                        </div>
+                    </div>
+                    <div>
+                        <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight bg-gradient-to-r from-white via-gray-200 to-gray-400 bg-clip-text text-transparent">
+                            <span id="header-agent-name">Fred</span> Command Center
+                        </h1>
+                        <p class="text-xs sm:text-sm text-blue-400 font-medium tracking-wide flex items-center gap-1.5 mt-0.5">
+                            <span class="w-2 h-2 rounded-full bg-blue-500 animate-ping"></span>
+                            Assistente Virtual & Disparo Controlado
+                        </p>
+                    </div>
+                </div>
+
+                <div class="flex items-center space-x-3 glass-card px-5 py-2.5 rounded-2xl border border-gray-700/50 shadow-lg">
+                    <span id="status-indicator" class="w-3.5 h-3.5 rounded-full bg-yellow-500 animate-pulse"></span>
+                    <span id="status-text" class="text-sm font-semibold text-gray-200">Conectando...</span>
+                </div>
+            </header>
+
+            <!-- Caixa de Configuração do Agente -->
+            <div id="painel-config-card" class="glass-card rounded-2xl p-6 sm:p-8 mb-8 relative overflow-hidden transition-all">
+                <div class="flex items-center justify-between mb-6">
+                    <div>
+                        <h2 class="text-base sm:text-lg font-bold text-gray-200">⚙️ Personalização do Agente & Chave IA</h2>
+                        <p class="text-xs text-gray-400 mt-0.5">Configure o nome, script, comandos e senha.</p>
+                    </div>
+                    <button onclick="togglePainelConfig()" class="text-xs text-gray-400 hover:text-white px-3 py-1.5 rounded-lg bg-gray-800/50">Fechar ✕</button>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Nome do Agente</label>
+                        <input id="cfg-nome-agente" type="text" class="w-full bg-gray-950/80 border border-gray-700/80 rounded-xl px-4 py-3 text-sm text-white font-medium">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Comando Chat Ligar</label>
+                        <input id="cfg-cmd-ligar" type="text" class="w-full bg-gray-950/80 border border-gray-700/80 rounded-xl px-4 py-3 text-sm text-white font-mono text-xs">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Comando Chat Desligar</label>
+                        <input id="cfg-cmd-desligar" type="text" class="w-full bg-gray-950/80 border border-gray-700/80 rounded-xl px-4 py-3 text-sm text-white font-mono text-xs">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">🔒 Senha do Painel</label>
+                        <input id="cfg-senha-painel" type="password" class="w-full bg-gray-950/80 border border-amber-500/40 rounded-xl px-4 py-3 text-sm text-white font-mono text-xs">
+                    </div>
+                </div>
+
+                <div class="mb-6">
+                    <label class="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Script do Agente (System Instruction)</label>
+                    <textarea id="cfg-script-agente" rows="4" class="w-full bg-gray-950/80 border border-gray-700/80 rounded-xl p-4 text-sm text-white leading-relaxed"></textarea>
+                </div>
+
+                <div class="flex justify-end">
+                    <button onclick="salvarConfiguracoesAgente()" class="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold px-6 py-3 rounded-xl text-sm transition">
+                        💾 Salvar Configurações
+                    </button>
+                </div>
+            </div>
+
+            <!-- Grid Principal -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <div class="glass-card p-6 rounded-2xl flex flex-col items-center justify-center">
+                    <h2 class="text-xs font-semibold text-gray-300 mb-4 tracking-wider uppercase">Conexão WhatsApp</h2>
+                    <div id="qr-container" class="bg-white p-4 rounded-xl shadow-2xl hidden">
+                        <canvas id="qr-code" class="rounded-lg"></canvas>
+                    </div>
+                    <div id="connected-badge" class="hidden text-center py-6">
+                        <div class="w-16 h-16 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-3xl rounded-2xl flex items-center justify-center mx-auto mb-3">✅</div>
+                        <p class="text-emerald-400 font-bold tracking-wide">Conectado ao WhatsApp</p>
+                    </div>
+                    <div id="loading-badge" class="text-center text-gray-400 py-6">
+                        <div class="inline-block w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mb-2"></div>
+                        <p class="text-sm">Aguardando status...</p>
+                    </div>
+                </div>
+
+                <div class="glass-card p-6 rounded-2xl flex flex-col justify-between">
+                    <div>
+                        <h2 class="text-xs font-semibold text-gray-300 mb-1 tracking-wider uppercase">Controle Global</h2>
+                        <p class="text-xs text-gray-400">Ativar ou desativar o agente para todos os contatos.</p>
+                    </div>
+
+                    <div class="my-4 flex flex-col items-center justify-center">
+                        <span id="robot-state-label" class="text-xs font-mono uppercase tracking-wider text-emerald-400 font-bold">Sistema Operante</span>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center bg-gray-950/60 p-4 rounded-xl border border-gray-800/80">
+                            <span class="font-medium text-sm text-gray-300">Bot Global</span>
+                            <button id="toggle-global-btn" onclick="toggleGlobalBot()" class="px-5 py-2.5 rounded-xl font-bold text-xs uppercase tracking-wider bg-emerald-600 text-white">
+                                ATIVADO
+                            </button>
+                        </div>
+
+                        <button onclick="clearMemory()" class="w-full py-3 bg-rose-500/10 text-rose-400 border border-rose-500/20 rounded-xl hover:bg-rose-600 hover:text-white transition font-semibold text-xs uppercase tracking-wider">
+                            🧹 Limpar Memória de Conversas
+                        </button>
+                    </div>
+                </div>
+
+                <div class="glass-card p-6 rounded-2xl flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-4">
+                            <h2 class="text-xs font-semibold text-gray-300 tracking-wider uppercase">📊 Métricas</h2>
+                            <button type="button" onclick="abrirCaixaFlutuante('todos')" class="px-2.5 py-1 rounded-lg bg-indigo-500/15 text-[10px] text-indigo-300 font-mono uppercase font-semibold">
+                                Todos
+                            </button>
+                        </div>
+
+                        <div class="space-y-3 pt-2 border-t border-gray-800/80">
+                            <button type="button" onclick="abrirCaixaFlutuante('ativas')" class="w-full bg-gray-950/60 p-3 rounded-xl border border-gray-800/80 hover:border-blue-500/40 transition flex justify-between items-center">
+                                <span class="text-xs font-semibold text-gray-300 uppercase">Ativas</span>
+                                <span id="total-conversas" class="text-lg font-extrabold text-blue-400">0</span>
+                            </button>
+
+                            <div id="card-metrica-aguardando" class="rounded-xl">
+                                <button type="button" onclick="abrirCaixaFlutuante('aguardando')" class="w-full bg-gray-950/60 p-3 rounded-xl border border-gray-800/80 hover:border-yellow-400/50 transition flex justify-between items-center">
+                                    <span class="text-xs font-semibold text-gray-300 uppercase">Aguardando</span>
+                                    <span id="total-aguardando" class="text-lg font-extrabold text-yellow-400">0</span>
+                                </button>
+                            </div>
+
+                            <button type="button" onclick="abrirCaixaFlutuante('finalizadas')" class="w-full bg-gray-950/60 p-3 rounded-xl border border-gray-800/80 hover:border-purple-500/40 transition flex justify-between items-center">
+                                <span class="text-xs font-semibold text-gray-300 uppercase">Finalizadas</span>
+                                <span id="total-finalizadas" class="text-lg font-extrabold text-purple-400">0</span>
+                            </button>
+
+                            <button type="button" onclick="abrirCaixaFlutuante('bloqueadas')" class="w-full bg-gray-950/60 p-3 rounded-xl border border-gray-800/80 hover:border-amber-500/40 transition flex justify-between items-center">
+                                <span class="text-xs font-semibold text-gray-300 uppercase">Bloqueadas</span>
+                                <span id="total-bloqueados" class="text-lg font-extrabold text-amber-400">0</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="bg-gray-950/40 px-4 py-2 rounded-xl border border-gray-800/50 flex justify-between items-center text-xs mt-4">
+                        <span class="text-gray-400">Modelo Core:</span>
+                        <span id="modelo-ia-text" class="font-mono text-indigo-400 font-bold">Carregando...</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card de Campanha de Disparo Controlado (Base Local até 10 km) -->
+            <div class="glass-card rounded-2xl p-6 sm:p-8 mb-8 space-y-6">
+                <div class="flex flex-wrap items-center justify-between gap-4 border-b border-gray-800/80 pb-4">
+                    <div>
+                        <h2 class="text-lg font-bold text-white flex items-center gap-2">
+                            📣 Campanha & Fila Local (Filtro até 10 km)
+                        </h2>
+                        <p class="text-xs text-gray-400 mt-1">
+                            O WhatsApp/Meta não fornece busca automática de números por raio GPS. Importe sua lista local de drogarias e dispare com intervalo aleatório e pausas por lote.
+                        </p>
+                    </div>
+                    <div class="flex flex-wrap items-center gap-2 text-xs font-mono">
+                        <span id="campanha-status-badge" class="px-3 py-1.5 rounded-xl bg-gray-900 border border-gray-700 text-gray-300">Parada</span>
+                        <span id="campanha-contador-badge" class="px-3 py-1.5 rounded-xl bg-blue-950/60 border border-blue-800/50 text-blue-300">0 / 0 enviados</span>
+                    </div>
+                </div>
+
+                <!-- Adicionar lead rápido -->
+                <div class="grid grid-cols-1 sm:grid-cols-5 gap-3">
+                    <input id="lead-nome" type="text" placeholder="Nome (opcional)" class="bg-gray-950/80 border border-gray-700/80 rounded-xl px-3.5 py-2.5 text-xs text-white">
+                    <input id="lead-estabelecimento" type="text" placeholder="Drogaria (ex: Drogaria Central)" class="bg-gray-950/80 border border-gray-700/80 rounded-xl px-3.5 py-2.5 text-xs text-white">
+                    <input id="lead-bairro" type="text" placeholder="Bairro" class="bg-gray-950/80 border border-gray-700/80 rounded-xl px-3.5 py-2.5 text-xs text-white">
+                    <input id="lead-dist" type="number" step="0.1" max="10" placeholder="Dist. km (<= 10)" class="bg-gray-950/80 border border-gray-700/80 rounded-xl px-3.5 py-2.5 text-xs text-white">
+                    <div class="flex gap-2">
+                        <input id="lead-numero" type="text" placeholder="62999999999" class="flex-1 bg-gray-950/80 border border-gray-700/80 rounded-xl px-3.5 py-2.5 text-xs text-white font-mono">
+                        <button type="button" onclick="adicionarLeadRapido()" class="px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold">+ Add</button>
+                    </div>
+                </div>
+
+                <!-- Importar JSON em lote -->
+                <div>
+                    <div class="flex items-center justify-between mb-2">
+                        <label class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Importar Lista em JSON (filtra automaticamente distancia_km &gt; 10)</label>
+                        <button type="button" onclick="importarLeadsJson()" class="px-3.5 py-1.5 rounded-xl bg-gray-800 hover:bg-gray-700 text-xs font-semibold text-blue-300">
+                            📥 Importar JSON para Fila
+                        </button>
+                    </div>
+                    <textarea id="campanha-json-input" rows="3" placeholder='[{"nome":"Ana","estabelecimento":"Drogaria Saúde","bairro":"Setor Oeste","distancia_km":3.5,"numero":"62999998888"}]' class="w-full bg-gray-950/80 border border-gray-700/80 rounded-xl p-3 text-xs text-gray-200 font-mono"></textarea>
+                </div>
+
+                <!-- Mensagem e Parâmetros de Segurança -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+                    <div class="lg:col-span-2">
+                        <label class="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">
+                            Mensagem de Abordagem (use {nome} e {estabelecimento})
+                        </label>
+                        <textarea id="campanha-mensagem" rows="5" class="w-full bg-gray-950/80 border border-gray-700/80 rounded-xl p-3.5 text-xs text-white leading-relaxed"></textarea>
+                    </div>
+
+                    <div class="bg-gray-950/60 border border-gray-800/80 rounded-xl p-4 space-y-3">
+                        <p class="text-xs font-bold text-amber-300 uppercase tracking-wider">Ritmo & Proteção</p>
+                        <div class="grid grid-cols-2 gap-2">
+                            <div>
+                                <label class="block text-[10px] text-gray-400 uppercase">Delay mín (s)</label>
+                                <input id="camp-delay-min" type="number" value="25" min="10" class="w-full bg-gray-900 border border-gray-700 rounded-lg px-2.5 py-1.5 text-xs text-white font-mono">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] text-gray-400 uppercase">Delay máx (s)</label>
+                                <input id="camp-delay-max" type="number" value="60" min="15" class="w-full bg-gray-900 border border-gray-700 rounded-lg px-2.5 py-1.5 text-xs text-white font-mono">
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2">
+                            <div>
+                                <label class="block text-[10px] text-gray-400 uppercase">Pausa a cada</label>
+                                <input id="camp-lote" type="number" value="8" min="1" class="w-full bg-gray-900 border border-gray-700 rounded-lg px-2.5 py-1.5 text-xs text-white font-mono">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] text-gray-400 uppercase">Máx / dia</label>
+                                <input id="camp-max-dia" type="number" value="35" min="1" class="w-full bg-gray-900 border border-gray-700 rounded-lg px-2.5 py-1.5 text-xs text-white font-mono">
+                            </div>
+                        </div>
+                        <label class="flex items-center gap-2 text-xs text-gray-300 pt-1">
+                            <input id="camp-horario-comercial" type="checkbox" checked class="rounded bg-gray-900 border-gray-700">
+                            Apenas horário comercial (08h–19h)
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Botões de Controle da Campanha -->
+                <div class="flex flex-wrap items-center justify-between gap-3 pt-2">
+                    <div id="campanha-fila-resumo" class="text-xs text-gray-400 font-mono">
+                        Pendentes: 0 | Enviados: 0 | Erros: 0 | Ignorados: 0
+                    </div>
+                    <div class="flex flex-wrap gap-2.5">
+                        <button type="button" onclick="iniciarCampanha()" class="px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition">
+                            ▶ Iniciar Campanha
+                        </button>
+                        <button type="button" onclick="pausarCampanha()" class="px-4 py-2.5 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 text-xs font-bold transition">
+                            ⏸ Pausar / Retomar
+                        </button>
+                        <button type="button" onclick="pararCampanha()" class="px-4 py-2.5 rounded-xl bg-rose-500/20 hover:bg-rose-500/30 text-rose-300 border border-rose-500/40 text-xs font-bold transition">
+                            ⏹ Parar
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Logs -->
+            <div class="glass-card rounded-2xl p-6 sm:p-8">
+                <h2 class="text-lg font-bold text-gray-200 mb-4 flex items-center gap-2"><span>🖥️</span> Logs Recentes</h2>
+                <div id="logs" class="bg-gray-950/90 p-4 rounded-xl h-44 overflow-y-auto font-mono text-xs text-gray-400 space-y-2 border border-gray-800/80"></div>
+            </div>
+        </div>
+
+        <!-- Modais -->
+        <div id="config-lock-modal" onclick="if(event.target === this) fecharModalSenhaConfig()" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md hidden items-center justify-center p-4">
+            <div class="glass-card border border-gray-700/80 w-full max-w-md rounded-2xl p-7 shadow-2xl">
+                <h3 class="text-lg font-extrabold text-white mb-2">🔐 Configurações Protegidas</h3>
+                <p class="text-xs text-gray-400 mb-4">Informe a senha de acesso ao painel para abrir.</p>
+                <input id="config-senha-input" type="password" placeholder="Digite sua senha..." onkeypress="if(event.key === 'Enter') confirmarSenhaConfig()" class="w-full bg-gray-950 border border-gray-700/80 rounded-xl px-4 py-3 text-sm text-white font-mono mb-3">
+                <p id="config-senha-erro" class="text-xs text-rose-400 font-medium hidden mb-3"></p>
+                <div class="flex justify-end gap-2">
+                    <button type="button" onclick="fecharModalSenhaConfig()" class="px-4 py-2.5 rounded-xl text-xs font-semibold text-gray-400 bg-gray-900">Cancelar</button>
+                    <button type="button" onclick="confirmarSenhaConfig()" class="bg-amber-500 text-gray-950 font-extrabold px-5 py-2.5 rounded-xl text-xs">Abrir</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="floating-metric-modal" onclick="if(event.target === this) fecharCaixaFlutuante()" class="fixed inset-0 bg-black/80 backdrop-blur-md hidden items-center justify-center p-4 z-50">
+            <div class="glass-card border border-gray-700/80 w-full max-w-3xl rounded-2xl flex flex-col max-h-[85vh] overflow-hidden shadow-2xl">
+                <div class="bg-gray-950/90 p-5 flex justify-between items-center border-b border-gray-800 shrink-0">
+                    <div>
+                        <h3 id="floating-modal-title" class="font-bold text-lg text-white">Detalhes</h3>
+                        <p id="floating-modal-subtitle" class="text-xs text-gray-400 mt-0.5">Gerenciamento interativo</p>
+                    </div>
+                    <button onclick="fecharCaixaFlutuante()" class="text-gray-400 hover:text-white font-bold px-3 py-1.5 rounded-xl bg-gray-900 border border-gray-800 text-xs">Fechar ✕</button>
+                </div>
+                <div id="floating-modal-body" class="p-6 overflow-y-auto space-y-4 bg-gray-950/30 flex-1 min-h-0"></div>
+            </div>
+        </div>
+
+        <div id="chat-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md hidden items-center justify-center p-4 z-50">
+            <div class="glass-card border border-gray-700/80 w-full max-w-2xl rounded-2xl flex flex-col h-[82vh] overflow-hidden">
+                <div class="bg-gray-950/80 p-5 flex justify-between items-center border-b border-gray-800 shrink-0">
+                    <div>
+                        <h3 id="modal-client-title" class="font-bold text-lg text-white">Conversa</h3>
+                        <p id="modal-client-status" class="text-xs text-emerald-400 font-medium">Status: Ativo</p>
+                    </div>
+                    <div class="flex flex-wrap items-center gap-2">
+                        <button id="modal-btn-atendido" type="button" onclick="marcarAtendidoEBloquearChatAtual()" class="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition">
+                            ✓ Atendido
+                        </button>
+                        <button id="modal-btn-bloquear" type="button" onclick="bloquearContatoChatAtual()" class="px-3 py-1.5 rounded-xl bg-rose-600/80 hover:bg-rose-600 text-white text-xs font-bold transition">
+                            Bloquear
+                        </button>
+                        <button onclick="fecharModalChat()" class="text-gray-400 hover:text-white font-bold px-2">✕</button>
+                    </div>
+                </div>
+                <div id="modal-chat-messages" class="flex-1 p-6 overflow-y-auto space-y-3.5 bg-gray-950/30 min-h-0"></div>
+                <div class="p-5 bg-gray-950/80 border-t border-gray-800 flex gap-3 shrink-0">
+                    <input id="modal-input-mensagem" type="text" placeholder="Digite sua resposta..." onkeypress="if(event.key === 'Enter') enviarMensagemPainel()" class="flex-1 bg-gray-900 border border-gray-700/80 rounded-xl px-4 py-3 text-sm text-white">
+                    <button onclick="enviarMensagemPainel()" class="bg-blue-600 hover:bg-blue-500 text-white font-bold px-6 py-3 rounded-xl text-sm transition">Enviar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const socket = io({ autoConnect: false });
+        let isGlobalActive = true;
+        let currentOpenJid = null;
+        let currentFloatingTipo = null;
+        let cachedConversas = [];
+        let cachedStatusUsuarios = {};
+        let cachedStatusAguardando = {};
+        let cachedStatusFinalizadas = {};
+        let cacheContatosBloqueadosGlobal = [];
+        let configDesbloqueado = false;
+        let ultimoTotalConversas = -1;
+
+        function extrairNumeroLimpo(jidOuNumero) {
+            return String(jidOuNumero || '').split('@')[0].split(':')[0].replace(/\D/g, '');
+        }
+
+        const jidsAtendidosLocalmente = new Set();
+
+        function marcarAtendidoEBloquear(jid, numeroInformado = '') {
+            const numeroLimpo = extrairNumeroLimpo(numeroInformado || jid);
+
+            if (jid) {
+                jidsAtendidosLocalmente.add(jid);
+                jidsAtendidosLocalmente.add(jid.replace(/:\d+@/, '@'));
+                cachedStatusAguardando[jid] = false;
+                cachedStatusFinalizadas[jid] = true;
+                cachedStatusUsuarios[jid] = false;
+                const conv = cachedConversas.find(c => c.jidOriginal === jid);
+                if (conv) conv.status = 'Finalizada';
+            }
+
+            if (numeroLimpo && !cacheContatosBloqueadosGlobal.includes(numeroLimpo)) {
+                cacheContatosBloqueadosGlobal.push(numeroLimpo);
+            }
+
+            socket.emit('atendido_e_bloquear', { jid, numero: numeroLimpo });
+
+            const qtdReal = Object.entries(cachedStatusAguardando)
+                .filter(([k, val]) => val === true && !cachedStatusFinalizadas[k] && !jidsAtendidosLocalmente.has(k)).length;
+            document.getElementById('total-aguardando').textContent = qtdReal;
+            document.getElementById('total-bloqueados').textContent = cacheContatosBloqueadosGlobal.length;
+            const totalFin = Object.values(cachedStatusFinalizadas).filter(Boolean).length;
+            document.getElementById('total-finalizadas').textContent = totalFin;
+
+            atualizarBannerAguardando();
+            if (currentFloatingTipo) abrirCaixaFlutuante(currentFloatingTipo);
+            if (currentOpenJid === jid) renderizarMensagensChat(jid);
+
+            setTimeout(() => carregarDadosIniciais(), 600);
+        }
+
+        function marcarAtendidoEBloquearChatAtual() {
+            if (!currentOpenJid) return;
+            const num = extrairNumeroLimpo(currentOpenJid);
+            marcarAtendidoEBloquear(currentOpenJid, num);
+        }
+
+        function abrirModalSenhaConfig() {
+            const modal = document.getElementById('config-lock-modal');
+            const input = document.getElementById('config-senha-input');
+            const erroEl = document.getElementById('config-senha-erro');
+            if (!modal || !input) return;
+            if (erroEl) erroEl.classList.add('hidden');
+            input.value = '';
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            setTimeout(() => input.focus(), 80);
+        }
+
+        function fecharModalSenhaConfig() {
+            const modal = document.getElementById('config-lock-modal');
+            if (!modal) return;
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        async function confirmarSenhaConfig() {
+            const card = document.getElementById('painel-config-card');
+            const input = document.getElementById('config-senha-input');
+            const erroEl = document.getElementById('config-senha-erro');
+            try {
+                const res = await fetch('/api/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ senha: input.value })
+                });
+                const data = await res.json();
+                if (res.ok && data.success) {
+                    configDesbloqueado = true;
+                    fecharModalSenhaConfig();
+                    card.classList.add('show');
+                } else if (erroEl) {
+                    erroEl.textContent = data.error || 'Senha incorreta.';
+                    erroEl.classList.remove('hidden');
+                }
+            } catch (_) {
+                if (erroEl) {
+                    erroEl.textContent = 'Erro ao validar a senha.';
+                    erroEl.classList.remove('hidden');
+                }
+            }
+        }
+
+        function togglePainelConfig() {
+            const card = document.getElementById('painel-config-card');
+            if (!card) return;
+            if (card.classList.contains('show')) {
+                card.classList.remove('show');
+                return;
+            }
+            if (configDesbloqueado) {
+                card.classList.add('show');
+                return;
+            }
+            abrirModalSenhaConfig();
+        }
+
+        async function verificarSessaoPainel() {
+            try {
+                const res = await fetch('/api/auth/status', { cache: 'no-store' });
+                const data = await res.json();
+                const lockScreen = document.getElementById('auth-lock-screen');
+                if (data.authenticated) {
+                    lockScreen.classList.add('hidden');
+                    if (!socket.connected) socket.connect();
+                    carregarDadosIniciais();
+                } else {
+                    lockScreen.classList.remove('hidden');
+                    if (socket.connected) socket.disconnect();
+                }
+            } catch (e) {
+                console.error('Erro ao verificar sessão:', e);
+            }
+        }
+
+        async function realizarLoginPainel() {
+            const input = document.getElementById('login-senha-input');
+            const erroEl = document.getElementById('login-erro-msg');
+            erroEl.classList.add('hidden');
+            try {
+                const res = await fetch('/api/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ senha: input.value })
+                });
+                const data = await res.json();
+                if (res.ok && data.success) {
+                    input.value = '';
+                    document.getElementById('auth-lock-screen').classList.add('hidden');
+                    socket.connect();
+                    carregarDadosIniciais();
+                } else {
+                    erroEl.textContent = data.error || 'Senha incorreta.';
+                    erroEl.classList.remove('hidden');
+                }
+            } catch (_) {
+                erroEl.textContent = 'Erro de conexão com o servidor.';
+                erroEl.classList.remove('hidden');
+            }
+        }
+
+        function atualizarUIcampanha(camp) {
+            if (!camp) return;
+            const statusBadge = document.getElementById('campanha-status-badge');
+            const contBadge = document.getElementById('campanha-contador-badge');
+            const resumoEl = document.getElementById('campanha-fila-resumo');
+
+            if (statusBadge) {
+                statusBadge.textContent = camp.rodando ? (camp.pausada ? 'Pausada' : 'Em execução') : 'Parada';
+            }
+            if (contBadge) {
+                const c = camp.contadores || {};
+                contBadge.textContent = `${c.enviado || 0} / ${c.total || 0} enviados (sessão: ${camp.enviadosSessao || 0})`;
+            }
+            if (resumoEl) {
+                const c = camp.contadores || {};
+                resumoEl.textContent = `Pendentes: ${c.pendente || 0} | Enviados: ${c.enviado || 0} | Erros: ${c.erro || 0} | Ignorados: ${c.ignorado || 0}`;
+            }
+
+            const msgEl = document.getElementById('campanha-mensagem');
+            if (msgEl && document.activeElement !== msgEl && !msgEl.value && camp.mensagemAtual) {
+                msgEl.value = camp.mensagemAtual;
+            }
+        }
+
+        async function adicionarLeadRapido() {
+            const nome = document.getElementById('lead-nome').value.trim();
+            const estabelecimento = document.getElementById('lead-estabelecimento').value.trim();
+            const bairro = document.getElementById('lead-bairro').value.trim();
+            const distRaw = document.getElementById('lead-dist').value.trim();
+            const numero = document.getElementById('lead-numero').value.trim();
+            if (!numero) return alert('Informe o número de telefone.');
+
+            const lead = {
+                nome,
+                estabelecimento,
+                bairro,
+                distancia_km: distRaw !== '' ? Number(distRaw) : null,
+                numero
+            };
+
+            const res = await fetch('/api/campanha/leads', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ leads: [lead] })
+            });
+            const data = await res.json();
+            if (data.success) {
+                document.getElementById('lead-nome').value = '';
+                document.getElementById('lead-estabelecimento').value = '';
+                document.getElementById('lead-bairro').value = '';
+                document.getElementById('lead-dist').value = '';
+                document.getElementById('lead-numero').value = '';
+                atualizarUIcampanha(data.campanha);
+            } else {
+                alert(data.error || 'Erro ao adicionar lead.');
+            }
+        }
+
+        async function importarLeadsJson() {
+            const raw = document.getElementById('campanha-json-input').value.trim();
+            if (!raw) return alert('Cole um array JSON de leads primeiro.');
+            try {
+                const parsed = JSON.parse(raw);
+                const res = await fetch('/api/campanha/leads', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ leads: parsed })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    atualizarUIcampanha(data.campanha);
+                    alert('Leads importados para a fila.');
+                } else {
+                    alert(data.error || 'Erro ao importar.');
+                }
+            } catch (e) {
+                alert('JSON inválido: ' + e.message);
+            }
+        }
+
+        function obterConfigCampanhaForm() {
+            const minS = Number(document.getElementById('camp-delay-min').value) || 25;
+            const maxS = Number(document.getElementById('camp-delay-max').value) || 60;
+            return {
+                delayMinMs: minS * 1000,
+                delayMaxMs: Math.max(minS + 5, maxS) * 1000,
+                loteTamanho: Number(document.getElementById('camp-lote').value) || 8,
+                maxPorDia: Number(document.getElementById('camp-max-dia').value) || 35,
+                apenasHorarioComercial: Boolean(document.getElementById('camp-horario-comercial').checked)
+            };
+        }
+
+        async function iniciarCampanha() {
+            const mensagem = document.getElementById('campanha-mensagem').value.trim();
+            const res = await fetch('/api/campanha/iniciar', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ mensagem, config: obterConfigCampanhaForm() })
+            });
+            const data = await res.json();
+            if (data.success) atualizarUIcampanha(data.campanha);
+        }
+
+        async function pausarCampanha() {
+            const res = await fetch('/api/campanha/pausar', { method: 'POST' });
+            const data = await res.json();
+            if (data.success) atualizarUIcampanha(data.campanha);
+        }
+
+        async function pararCampanha() {
+            const res = await fetch('/api/campanha/parar', { method: 'POST' });
+            const data = await res.json();
+            if (data.success) atualizarUIcampanha(data.campanha);
+        }
+
+        function atualizarBannerAguardando() {
+            const banner = document.getElementById('banner-aguardando-humano');
+            const textoEl = document.getElementById('texto-banner-aguardando');
+            const botoesEl = document.getElementById('botoes-rapidos-aguardando');
+            const cardAguardando = document.getElementById('card-metrica-aguardando');
+            if (!banner) return;
+
+            const jidsAguardando = Object.entries(cachedStatusAguardando)
+                .filter(([jid, val]) => val === true && !cachedStatusFinalizadas[jid])
+                .map(([jid]) => jid);
+
+            if (jidsAguardando.length === 0) {
+                banner.classList.add('hidden');
+                banner.classList.remove('flex');
+                if (cardAguardando) cardAguardando.classList.remove('alerta-aguardando-piscando');
+                if (botoesEl) botoesEl.innerHTML = '';
+                return;
+            }
+
+            banner.classList.remove('hidden');
+            banner.classList.add('flex');
+            if (cardAguardando) cardAguardando.classList.add('alerta-aguardando-piscando');
+            if (textoEl) {
+                textoEl.textContent = `🚨 ATENÇÃO: ${jidsAguardando.length} CLIENTE(S) AGUARDANDO ATENDIMENTO HUMANO!`;
+            }
+            if (botoesEl) {
+                botoesEl.innerHTML = jidsAguardando.slice(0, 4).map(jid => {
+                    const conv = cachedConversas.find(c => c.jidOriginal === jid);
+                    const numLimpo = extrairNumeroLimpo(jid);
+                    const label = conv?.cliente || numLimpo;
+                    return `
+                        <div class="inline-flex items-center gap-1.5 bg-gray-950/80 border border-yellow-400/50 rounded-xl p-1">
+                            <button type="button" onclick="abrirModalChat('${jid}')" class="px-2.5 py-1 rounded-lg bg-yellow-400 text-gray-950 font-extrabold text-xs hover:bg-yellow-300 transition">
+                                ${label}
+                            </button>
+                            <button type="button" onclick="marcarAtendidoEBloquear('${jid}', '${numLimpo}')" class="px-2.5 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs transition">
+                                ✓ Atendido
+                            </button>
+                        </div>
+                    `;
+                }).join('');
+            }
+        }
+
+        function carregarDadosIniciais() {
+            fetch('/api/status', { cache: 'no-store' })
+                .then(res => res.ok ? res.json() : null)
+                .then(apiData => {
+                    if (!apiData) return;
+                    cacheContatosBloqueadosGlobal = apiData.contatosBloqueados || apiData.numerosIgnorados || [];
+                    document.getElementById('total-bloqueados').textContent = cacheContatosBloqueadosGlobal.length;
+                    if (apiData.detalhes?.conversasAtivas) {
+                        cachedConversas = apiData.detalhes.conversasAtivas;
+                        cachedStatusUsuarios = apiData.statusUsuarios || {};
+                        cachedStatusAguardando = apiData.statusAguardandoHumano || {};
+                        cachedStatusFinalizadas = apiData.statusConversasFinalizadas || {};
+                        const qtdReal = Object.entries(cachedStatusAguardando)
+                            .filter(([jid, val]) => val === true && !cachedStatusFinalizadas[jid]).length;
+                        document.getElementById('total-aguardando').textContent = qtdReal;
+                    }
+                    atualizarBannerAguardando();
+                    if (currentFloatingTipo) abrirCaixaFlutuante(currentFloatingTipo);
+                    if (currentOpenJid) renderizarMensagensChat(currentOpenJid);
+                    if (apiData.campanha) atualizarUIcampanha(apiData.campanha);
+                })
+                .catch(() => {});
+        }
+
+        function bloquearNumeroPainel() {
+            const input = document.getElementById('novo-bloqueio-input');
+            const numero = extrairNumeroLimpo(input?.value || '');
+            if (!numero) return alert('Digite um número válido com DDD.');
+            socket.emit('add_blocked_user', numero);
+            if (!cacheContatosBloqueadosGlobal.includes(numero)) {
+                cacheContatosBloqueadosGlobal.push(numero);
+            }
+            document.getElementById('total-bloqueados').textContent = cacheContatosBloqueadosGlobal.length;
+            if (input) input.value = '';
+            if (currentFloatingTipo === 'bloqueadas') abrirCaixaFlutuante('bloqueadas');
+        }
+
+        function desbloquearNumeroPainel(numero) {
+            const numLimpo = extrairNumeroLimpo(numero);
+            socket.emit('remove_blocked_user', numLimpo);
+            cacheContatosBloqueadosGlobal = cacheContatosBloqueadosGlobal.filter(n => extrairNumeroLimpo(n) !== numLimpo);
+            document.getElementById('total-bloqueados').textContent = cacheContatosBloqueadosGlobal.length;
+            if (currentFloatingTipo === 'bloqueadas') abrirCaixaFlutuante('bloqueadas');
+        }
+
+        function bloquearContatoChatAtual() {
+            if (!currentOpenJid) return;
+            const num = extrairNumeroLimpo(currentOpenJid);
+            if (!num) return;
+            socket.emit('add_blocked_user', num);
+            if (!cacheContatosBloqueadosGlobal.includes(num)) {
+                cacheContatosBloqueadosGlobal.push(num);
+            }
+            document.getElementById('total-bloqueados').textContent = cacheContatosBloqueadosGlobal.length;
+            renderizarMensagensChat(currentOpenJid);
+        }
+
+        socket.on('bot_status', (data) => {
+            isGlobalActive = Boolean(data.isBotActiveGlobal);
+            cachedStatusUsuarios = data.statusUsuarios || {};
+            cachedStatusAguardando = data.statusAguardandoHumano || {};
+            cachedStatusFinalizadas = data.statusConversasFinalizadas || {};
+            jidsAtendidosLocalmente.forEach((jidMarcado) => {
+                if (data.statusAguardandoHumano?.[jidMarcado] === false || data.statusConversasFinalizadas?.[jidMarcado] === true) {
+                    jidsAtendidosLocalmente.delete(jidMarcado);
+                } else {
+                    cachedStatusAguardando[jidMarcado] = false;
+                    cachedStatusFinalizadas[jidMarcado] = true;
+                }
+            });
+            cacheContatosBloqueadosGlobal = data.contatosBloqueados || data.numerosIgnorados || [];
+
+            if (data.botConfig) {
+                const setIfIdle = (id, val) => {
+                    const el = document.getElementById(id);
+                    if (el && document.activeElement !== el && val !== undefined) el.value = val;
+                };
+                setIfIdle('cfg-nome-agente', data.botConfig.nomeAgente);
+                setIfIdle('cfg-cmd-ligar', data.botConfig.comandoLigar);
+                setIfIdle('cfg-cmd-desligar', data.botConfig.comandoDesligar);
+                setIfIdle('cfg-senha-painel', data.botConfig.senhaPainel);
+                setIfIdle('cfg-script-agente', data.botConfig.systemInstruction);
+            }
+
+            if (data.modeloIa) document.getElementById('modelo-ia-text').textContent = data.modeloIa;
+            if (data.botConfig?.nomeAgente) document.getElementById('header-agent-name').textContent = data.botConfig.nomeAgente;
+            if (data.campanha) atualizarUIcampanha(data.campanha);
+
+            const globalBtn = document.getElementById('toggle-global-btn');
+            globalBtn.textContent = isGlobalActive ? 'ATIVADO' : 'DESATIVADO';
+            globalBtn.className = isGlobalActive
+                ? 'px-5 py-2.5 rounded-xl font-bold text-xs uppercase tracking-wider bg-emerald-600 text-white'
+                : 'px-5 py-2.5 rounded-xl font-bold text-xs uppercase tracking-wider bg-rose-600 text-white';
+
+            document.getElementById('robot-state-label').textContent = isGlobalActive ? 'Sistema Operante' : 'Agente Pausado';
+
+            const statusIndicator = document.getElementById('status-indicator');
+            const statusText = document.getElementById('status-text');
+            const qrContainer = document.getElementById('qr-container');
+            const connectedBadge = document.getElementById('connected-badge');
+            const loadingBadge = document.getElementById('loading-badge');
+
+            if (data.connectionStatus === 'open') {
+                statusIndicator.className = 'w-3.5 h-3.5 rounded-full bg-emerald-500';
+                statusText.textContent = 'Conectado';
+                qrContainer.classList.add('hidden');
+                loadingBadge.classList.add('hidden');
+                connectedBadge.classList.remove('hidden');
+            } else if (data.connectionStatus === 'qr_ready' && data.qrCode) {
+                statusIndicator.className = 'w-3.5 h-3.5 rounded-full bg-amber-500 animate-pulse';
+                statusText.textContent = 'Aguardando QR Code';
+                connectedBadge.classList.add('hidden');
+                loadingBadge.classList.add('hidden');
+                qrContainer.classList.remove('hidden');
+                QRCode.toCanvas(document.getElementById('qr-code'), data.qrCode, { width: 210 });
+            } else {
+                statusIndicator.className = 'w-3.5 h-3.5 rounded-full bg-rose-500 animate-pulse';
+                statusText.textContent = 'Desconectado';
+                qrContainer.classList.add('hidden');
+                connectedBadge.classList.add('hidden');
+                loadingBadge.classList.remove('hidden');
+            }
+
+            const qtdReal = Object.entries(cachedStatusAguardando)
+                .filter(([jid, val]) => val === true && !cachedStatusFinalizadas[jid]).length;
+
+            const totalAtivasAtual = data.totalConversas || 0;
+            document.getElementById('total-conversas').textContent = totalAtivasAtual;
+            document.getElementById('total-aguardando').textContent = qtdReal;
+            document.getElementById('total-finalizadas').textContent = data.totalFinalizadas || 0;
+            document.getElementById('total-bloqueados').textContent = cacheContatosBloqueadosGlobal.length;
+
+            atualizarBannerAguardando();
+
+            if (totalAtivasAtual !== ultimoTotalConversas) {
+                ultimoTotalConversas = totalAtivasAtual;
+                carregarDadosIniciais();
+            } else if (currentFloatingTipo) {
+                abrirCaixaFlutuante(currentFloatingTipo);
+            }
+        });
+
+        socket.on('new_message', (data) => {
+            const logs = document.getElementById('logs');
+            const logItem = document.createElement('div');
+            logItem.className = 'text-gray-300 font-mono text-[11px] border-l-2 border-blue-500 pl-2 py-0.5';
+            logItem.textContent = `[${data.time}] ${data.sender}: ${data.text}`;
+            logs.appendChild(logItem);
+            logs.scrollTop = logs.scrollHeight;
+            carregarDadosIniciais();
+        });
+
+        function salvarConfiguracoesAgente() {
+            socket.emit('save_agent_config', {
+                nomeAgente: document.getElementById('cfg-nome-agente').value.trim(),
+                systemInstruction: document.getElementById('cfg-script-agente').value.trim(),
+                comandoLigar: document.getElementById('cfg-cmd-ligar').value.trim(),
+                comandoDesligar: document.getElementById('cfg-cmd-desligar').value.trim(),
+                senhaPainel: document.getElementById('cfg-senha-painel').value.trim()
+            });
+        }
+
+        socket.on('config_saved_success', (res) => {
+            alert(res.message);
+            if (res.senhaAlterada) {
+                configDesbloqueado = false;
+                document.getElementById('painel-config-card')?.classList.remove('show');
+                socket.disconnect();
+                document.getElementById('auth-lock-screen').classList.remove('hidden');
+            }
+        });
+
+        function abrirCaixaFlutuante(tipo) {
+            currentFloatingTipo = tipo;
+            const modal = document.getElementById('floating-metric-modal');
+            const titleEl = document.getElementById('floating-modal-title');
+            const bodyEl = document.getElementById('floating-modal-body');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            titleEl.textContent = `Detalhes — ${tipo}`;
+
+            if (tipo === 'bloqueadas') {
+                const formAdd = `
+                    <div class="flex gap-2 mb-4 shrink-0">
+                        <input id="novo-bloqueio-input" type="text" placeholder="Ex: 5562999999999" onkeypress="if(event.key === 'Enter') bloquearNumeroPainel()" class="flex-1 bg-gray-900 border border-gray-700 rounded-xl px-3.5 py-2 text-xs text-white font-mono">
+                        <button type="button" onclick="bloquearNumeroPainel()" class="px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-500 text-white text-xs font-bold transition">
+                            Bloquear
+                        </button>
+                    </div>
+                `;
+                const listaHtml = cacheContatosBloqueadosGlobal.length
+                    ? cacheContatosBloqueadosGlobal.map(num => `
+                        <div class="p-3 rounded-xl bg-gray-900 border border-gray-800 flex justify-between items-center gap-2">
+                            <span class="font-mono text-xs text-amber-300">${num}</span>
+                            <button type="button" onclick="desbloquearNumeroPainel('${num}')" class="px-3 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition">
+                                Desbloquear
+                            </button>
+                        </div>
+                    `).join('')
+                    : '<p class="text-xs text-gray-500">Nenhum número bloqueado.</p>';
+
+                bodyEl.innerHTML = formAdd + `<div class="max-h-[55vh] overflow-y-auto space-y-2 pr-1">${listaHtml}</div>`;
+                return;
+            }
+
+            const filtradas = cachedConversas.filter(c => {
+                const jid = c.jidOriginal;
+                const isFin = Boolean(cachedStatusFinalizadas[jid]);
+                const isAgu = Boolean(cachedStatusAguardando[jid]) && !isFin;
+                if (tipo === 'aguardando') return isAgu;
+                if (tipo === 'finalizadas') return isFin;
+                if (tipo === 'ativas') return !isFin;
+                return true;
+            });
+
+            bodyEl.innerHTML = filtradas.length
+                ? `<div class="max-h-[60vh] overflow-y-auto space-y-2 pr-1">${filtradas.map(c => {
+                    const jid = c.jidOriginal;
+                    const numLimpo = extrairNumeroLimpo(jid);
+                    const jaBloqueado = cacheContatosBloqueadosGlobal.includes(numLimpo);
+                    const isFin = Boolean(cachedStatusFinalizadas[jid]);
+                    const isAgu = Boolean(cachedStatusAguardando[jid]) && !isFin;
+                    const statusLabel = isFin ? 'Finalizada' : (isAgu ? 'Aguardando Humano' : (c.status || 'Ativo'));
+
+                    return `
+                        <div class="p-3 rounded-xl bg-gray-900 border border-gray-800 flex justify-between items-center gap-2">
+                            <div>
+                                <span class="font-mono text-xs text-blue-300 block">${c.cliente || numLimpo}</span>
+                                <span class="text-[11px] ${isAgu ? 'text-yellow-300 font-semibold' : 'text-gray-400'}">${statusLabel}</span>
+                            </div>
+                            <div class="flex flex-wrap gap-2">
+                                <button type="button" onclick="fecharCaixaFlutuante(); abrirModalChat('${jid}')" class="px-3 py-1 rounded-lg bg-blue-600 hover:bg-blue-500 text-xs font-bold transition">Abrir</button>
+                                ${!isFin ? `<button type="button" onclick="marcarAtendidoEBloquear('${jid}', '${numLimpo}')" class="px-3 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-xs font-bold transition">✓ Atendido</button>` : ''}
+                                ${jaBloqueado
+                                    ? `<button type="button" onclick="desbloquearNumeroPainel('${numLimpo}')" class="px-2.5 py-1 rounded-lg bg-amber-600 hover:bg-amber-500 text-xs font-bold transition">Desbloquear</button>`
+                                    : `<button type="button" onclick="socket.emit('add_blocked_user', '${numLimpo}')" class="px-2.5 py-1 rounded-lg bg-rose-600/80 hover:bg-rose-600 text-xs font-bold transition">Bloquear</button>`
+                                }
+                            </div>
+                        </div>
+                    `;
+                }).join('')}</div>`
+                : '<p class="text-xs text-gray-500">Sem registros nesta categoria.</p>';
+        }
+
+        function fecharCaixaFlutuante() {
+            currentFloatingTipo = null;
+            const modal = document.getElementById('floating-metric-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        function renderizarMensagensChat(jid) {
+            const conv = cachedConversas.find(c => c.jidOriginal === jid);
+            if (!conv) return;
+            const numLimpo = extrairNumeroLimpo(jid);
+            const isFin = Boolean(cachedStatusFinalizadas[jid]);
+            const isAgu = Boolean(cachedStatusAguardando[jid]) && !isFin;
+            const jaBloqueado = cacheContatosBloqueadosGlobal.includes(numLimpo);
+
+            document.getElementById('modal-client-title').textContent = `Conversa: ${conv.cliente || numLimpo}`;
+            const statusEl = document.getElementById('modal-client-status');
+            if (statusEl) {
+                statusEl.textContent = `Status: ${isFin ? 'Finalizada' : (isAgu ? 'Aguardando Humano' : 'Ativo')}${jaBloqueado ? ' • Bloqueado' : ''}`;
+            }
+
+            const btnAtendido = document.getElementById('modal-btn-atendido');
+            if (btnAtendido) {
+                btnAtendido.textContent = isFin && jaBloqueado ? '✓ Atendido e Bloqueado' : '✓ Atendido';
+            }
+
+            const btnBloq = document.getElementById('modal-btn-bloquear');
+            if (btnBloq) {
+                btnBloq.textContent = jaBloqueado ? 'Bloqueado' : 'Bloquear';
+            }
+
+            const box = document.getElementById('modal-chat-messages');
+            box.innerHTML = (conv.messages || []).map(m =>
+                `<div class="p-3 rounded-xl text-xs ${m.sender === 'cliente' ? 'bg-gray-900 text-gray-200' : 'bg-blue-600 text-white ml-auto max-w-[80%]'}">${m.text}</div>`
+            ).join('');
+            box.scrollTop = box.scrollHeight;
+        }
+
+        function abrirModalChat(jid) {
+            currentOpenJid = jid;
+            const conv = cachedConversas.find(c => c.jidOriginal === jid);
+            if (!conv) return;
+            document.getElementById('chat-modal').classList.remove('hidden');
+            document.getElementById('chat-modal').classList.add('flex');
+            renderizarMensagensChat(jid);
+        }
+
+        function fecharModalChat() {
+            document.getElementById('chat-modal').classList.add('hidden');
+            document.getElementById('chat-modal').classList.remove('flex');
+            currentOpenJid = null;
+        }
+
+        function enviarMensagemPainel() {
+            const input = document.getElementById('modal-input-mensagem');
+            const texto = input.value.trim();
+            if (!texto || !currentOpenJid) return;
+            fetch('/api/send-message', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ jid: currentOpenJid, message: texto })
+            }).then(() => {
+                input.value = '';
+                carregarDadosIniciais();
+            });
+        }
+
+        function toggleGlobalBot() { socket.emit('toggle_global_bot', !isGlobalActive); }
+        function clearMemory() { if (confirm('Deseja limpar toda a memória das conversas?')) socket.emit('clear_memory'); }
+
+        verificarSessaoPainel();
+    </script>
+</body>
+</html>
