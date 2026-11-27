@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Digitavia | Agentes Autônomos de IA para Advocacia, Comércio e Drogarias no WhatsApp</title>
+    <title>Digitavia | Agentes Autônomos de IA no WhatsApp para Qualquer Segmento</title>
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 88 64' fill='none'%3E%3Cdefs%3E%3ClinearGradient id='digFav' x1='14' y1='8' x2='72' y2='56' gradientUnits='userSpaceOnUse'%3E%3Cstop offset='0%25' stop-color='%230EA5E9'/%3E%3Cstop offset='55%25' stop-color='%232563EB'/%3E%3Cstop offset='100%25' stop-color='%234F46E5'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect x='10' y='9' width='7' height='7' rx='1.5' fill='%2338BDF8'/%3E%3Crect x='6' y='18' width='7' height='7' rx='1.5' fill='%230284C7'/%3E%3Crect x='4' y='27' width='7' height='7' rx='1.5' fill='%232563EB'/%3E%3Cpath d='M27 11H46C61.464 11 74 20.402 74 32C74 43.598 61.464 53 46 53H16L22.5 39H36.5L32.5 43.5H45.5C54.6127 43.5 62 38.3513 62 32C62 25.6487 54.6127 20.5 45.5 20.5H23L27 11Z' fill='url(%23digFav)'/%3E%3C/svg%3E">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -28,13 +28,13 @@
     <!-- Barra Superior -->
     <div class="bg-slate-900 text-slate-200 text-xs py-2.5 px-4">
         <div class="container mx-auto max-w-7xl flex flex-wrap items-center justify-between gap-2">
-            <span class="font-medium">⚡ Implantação assistida em até 48h • Triagem Jurídica, Comércio & Drogarias 24/7</span>
+            <span class="font-medium">⚡ Implantação em até 48h • Para qualquer segmento comercial (ex.: advocacia, comércio e drogarias) 24/7</span>
             <div class="flex items-center gap-4">
                 <span class="inline-flex items-center gap-1.5 text-emerald-400 font-semibold">
                     <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
                     Digitavia IA Online
                 </span>
-                    <button type="button" onclick="abrirModalContato('Suporte & Implantação')" class="underline hover:text-white transition">
+                <button type="button" onclick="abrirModalContato('Suporte & Implantação')" class="underline hover:text-white transition">
                     Falar com especialista
                 </button>
             </div>
@@ -213,10 +213,10 @@
                         <div>
                             <span class="text-xs font-bold uppercase tracking-wider text-blue-600">Digitavia • Agente Autônomo de IA</span>
                             <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-1 leading-tight">
-                                Digitavia — Atendimento & Triagem Inteligente no WhatsApp
+                                Digitavia — Agentes Autônomos de IA no WhatsApp para Qualquer Segmento
                             </h1>
                             <p class="text-xs sm:text-sm text-slate-600 mt-3 leading-relaxed">
-                                Esqueça menus engessados de "digite 1 ou 2". Agente humanizado que entende contexto, transcreve áudios, lê imagens e organiza o atendimento para advocacia, comércio e drogarias 24/7.
+                                Atendimento humanizado 24/7 que transcreve áudios, lê imagens e qualifica contatos para <strong>qualquer empresa ou segmento comercial</strong>. Advocacia, comércio e drogarias são apenas exemplos de implantação.
                             </p>
                         </div>
 
@@ -232,7 +232,7 @@
                                 </span>
                             </div>
                             <p id="descricao-variante-ativa" class="text-xs text-slate-600 mt-2">
-                                Compreende áudios e imagens, script jurídico, comercial ou drogaria, Command Center completo e operação contínua no servidor.
+                                Compreende áudios e imagens, script sob medida para qualquer ramo (ex.: advocacia, comércio ou drogaria), Command Center completo e operação contínua.
                             </p>
                         </div>
 
@@ -274,9 +274,9 @@
                         <!-- Seletor de Foco / Segmento -->
                         <div>
                             <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-2">
-                                2. Foco Operacional do Agente
+                                2. Foco Operacional do Agente (Exemplos ou Outro Segmento)
                             </label>
-                            <div class="grid grid-cols-3 gap-2">
+                            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
                                 <button type="button" id="foco-juridico" onclick="selecionarFoco('Escritório de Advocacia')" class="foco-btn py-2.5 px-2.5 rounded-xl border border-slate-200 text-xs font-bold text-slate-700 hover:border-blue-500 transition">
                                     ⚖️ Advocacia
                                 </button>
@@ -285,6 +285,9 @@
                                 </button>
                                 <button type="button" id="foco-drogaria" onclick="selecionarFoco('Drogaria / Farmácia')" class="foco-btn py-2.5 px-2.5 rounded-xl border border-slate-200 text-xs font-bold text-slate-700 hover:border-blue-500 transition">
                                     💊 Drogaria
+                                </button>
+                                <button type="button" id="foco-outro" onclick="selecionarFoco('Outro Segmento Comercial')" class="foco-btn py-2.5 px-2.5 rounded-xl border border-slate-200 text-xs font-bold text-slate-700 hover:border-blue-500 transition">
+                                    🏢 Outro Ramo
                                 </button>
                             </div>
                         </div>
@@ -364,12 +367,12 @@
     <section id="nichos" class="py-16 border-t border-slate-200">
         <div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
             <div class="max-w-3xl mb-12">
-                <span class="text-xs font-bold uppercase tracking-widest text-blue-600">Especialização Vertical</span>
+                <span class="text-xs font-bold uppercase tracking-widest text-blue-600">Qualquer Segmento Comercial</span>
                 <h2 class="text-2xl sm:text-4xl font-extrabold text-slate-900 mt-1 mb-3">
-                    Treinado sob medida para a realidade do seu negócio
+                    Adaptável a qualquer segmento comercial — com exemplos prontos
                 </h2>
                 <p class="text-sm sm:text-base text-slate-600">
-                    Configuramos o roteiro, os critérios de qualificação e o fluxo de transbordo para cada operação.
+                    Configuramos o roteiro para o ramo da sua empresa (clínicas, contabilidade, serviços, indústria, varejo etc.). Advocacia, comércio e drogarias são apenas alguns exemplos:
                 </p>
             </div>
 
@@ -377,7 +380,7 @@
                 <div class="card-surface rounded-2xl p-8 flex flex-col justify-between">
                     <div>
                         <span class="inline-block px-3 py-1 rounded-lg bg-blue-50 text-blue-700 text-xs font-bold uppercase">
-                            ⚖️ Jurídico & Escritórios
+                            ⚖️ Jurídico & Escritórios (Exemplo)
                         </span>
                         <h3 class="text-xl font-extrabold text-slate-900 mt-4 mb-3">
                             Triagem & Qualificação Jurídica
@@ -394,7 +397,7 @@
                 <div class="card-surface rounded-2xl p-8 flex flex-col justify-between">
                     <div>
                         <span class="inline-block px-3 py-1 rounded-lg bg-emerald-50 text-emerald-700 text-xs font-bold uppercase">
-                            🛍️ Comércio & Lojas
+                            🛍️ Comércio & Lojas (Exemplo)
                         </span>
                         <h3 class="text-xl font-extrabold text-slate-900 mt-4 mb-3">
                             Consultor de Vendas & Atendimento
@@ -411,7 +414,7 @@
                 <div class="card-surface rounded-2xl p-8 flex flex-col justify-between">
                     <div>
                         <span class="inline-block px-3 py-1 rounded-lg bg-indigo-50 text-indigo-700 text-xs font-bold uppercase">
-                            💊 Drogarias & Farmácias
+                            💊 Drogarias & Farmácias (Exemplo)
                         </span>
                         <h3 class="text-xl font-extrabold text-slate-900 mt-4 mb-3">
                             Atendimento 24/7 & Triagem de Pedidos
@@ -425,6 +428,18 @@
                     </button>
                 </div>
             </div>
+
+            <div class="mt-8 card-surface rounded-2xl p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                <div>
+                    <h3 class="text-base font-extrabold text-slate-900">Sua empresa atua em outro segmento?</h3>
+                    <p class="text-xs sm:text-sm text-slate-600 mt-1">
+                        Clínicas, contabilidade, imobiliárias, oficinas, estética, serviços, indústria ou qualquer outro ramo comercial — o agente é ajustado às suas regras.
+                    </p>
+                </div>
+                <button type="button" onclick="abrirModalContato('Outro Segmento Comercial')" class="py-2.5 px-5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs sm:text-sm transition shrink-0">
+                    Informar Outro Segmento →
+                </button>
+            </div>
         </div>
     </section>
 
@@ -437,7 +452,7 @@
                     Escolha o plano ideal para escalar seu atendimento
                 </h2>
                 <p class="text-sm sm:text-base text-slate-600">
-                    Implantação assistida pela equipe Digitavia: entregamos seu agente configurado, conectado e pronto para operar.
+                    Implantação assistida pela equipe Digitavia: entregamos seu agente configurado, conectado e pronto para operar em qualquer segmento.
                 </p>
             </div>
 
@@ -445,7 +460,7 @@
                 <div class="card-surface rounded-2xl p-7 flex flex-col justify-between">
                     <div>
                         <h3 class="text-lg font-extrabold text-slate-900">Start Essencial</h3>
-                        <p class="text-xs text-slate-500 mt-1">Ideal para lojas locais e autônomos.</p>
+                        <p class="text-xs text-slate-500 mt-1">Ideal para operações iniciais e autônomos de qualquer ramo.</p>
                         <div class="my-5">
                             <span class="text-xs text-slate-500">R$</span>
                             <span class="text-4xl font-extrabold text-slate-900">297</span>
@@ -468,7 +483,7 @@
                     </span>
                     <div>
                         <h3 class="text-xl font-extrabold text-slate-900">Pro Multimodal</h3>
-                        <p class="text-xs text-blue-700 font-medium mt-1">Completo para escritórios, comércios e drogarias.</p>
+                        <p class="text-xs text-blue-700 font-medium mt-1">Completo para qualquer empresa (ex.: advocacia, comércio e drogarias).</p>
                         <div class="my-5">
                             <span class="text-xs text-slate-500">R$</span>
                             <span class="text-4xl font-extrabold text-slate-900">497</span>
@@ -476,7 +491,7 @@
                         </div>
                         <ul class="space-y-2.5 text-sm text-slate-700 border-t border-slate-100 pt-5">
                             <li>✓ <strong>Compreende Áudios e Imagens</strong></li>
-                            <li>✓ Script Jurídico, Comercial ou Drogaria</li>
+                            <li>✓ Script sob medida para o seu segmento</li>
                             <li>✓ Command Center Completo</li>
                             <li>✓ Operação contínua no servidor</li>
                         </ul>
@@ -489,7 +504,7 @@
                 <div class="card-surface rounded-2xl p-7 flex flex-col justify-between">
                     <div>
                         <h3 class="text-lg font-extrabold text-slate-900">Business Scale</h3>
-                        <p class="text-xs text-slate-500 mt-1">Para bancas, franquias e redes.</p>
+                        <p class="text-xs text-slate-500 mt-1">Para empresas com múltiplos números, franquias e redes.</p>
                         <div class="my-5">
                             <span class="text-xs text-slate-500">R$</span>
                             <span class="text-4xl font-extrabold text-slate-900">897</span>
@@ -610,7 +625,7 @@
             </div>
 
             <form onsubmit="enviarMensagemGemini(event)" class="p-3 bg-white border-t border-slate-200 flex gap-2">
-                <input id="gemini-input-pergunta" type="text" required placeholder="Pergunte sobre planos, áudio, foto, drogaria..."
+                <input id="gemini-input-pergunta" type="text" required placeholder="Pergunte sobre planos, áudio, foto, seu segmento..."
                     class="flex-1 bg-slate-100 border border-slate-200 rounded-xl px-3.5 py-2 text-xs sm:text-sm text-slate-900 focus:outline-none focus:border-blue-600 focus:bg-white">
                 <button type="submit" id="gemini-btn-enviar" class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-4 py-2 rounded-xl text-xs sm:text-sm transition">
                     Enviar
@@ -645,11 +660,14 @@
                 </div>
                 <div>
                     <label class="block text-xs font-bold text-slate-700 mb-1">Segmento do Negócio</label>
-                    <select id="lead-segmento" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-sm text-slate-900 focus:outline-none focus:border-blue-600">
-                        <option value="Escritório de Advocacia">⚖️ Escritório de Advocacia</option>
-                        <option value="Comércio / Loja / Varejo">🛍️ Comércio / Loja / Varejo</option>
-                        <option value="Drogaria / Farmácia">💊 Drogaria / Farmácia</option>
+                    <select id="lead-segmento" onchange="alternarCampoOutroSegmento()" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-sm text-slate-900 focus:outline-none focus:border-blue-600">
+                        <option value="Escritório de Advocacia">⚖️ Advocacia (exemplo)</option>
+                        <option value="Comércio / Loja / Varejo">🛍️ Comércio / Loja / Varejo (exemplo)</option>
+                        <option value="Drogaria / Farmácia">💊 Drogaria / Farmácia (exemplo)</option>
+                        <option value="Outro Segmento Comercial">🏢 Outro Segmento Comercial (qualquer ramo)</option>
                     </select>
+                    <input id="lead-segmento-outro" type="text" placeholder="Qual é o segmento da sua empresa? (Ex: Clínica, Contabilidade...)"
+                        class="hidden mt-2 w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-sm text-slate-900 focus:outline-none focus:border-blue-600">
                 </div>
                 <div>
                     <label class="block text-xs font-bold text-slate-700 mb-1">Seu WhatsApp (com DDD)</label>
@@ -657,7 +675,7 @@
                 </div>
                 <div>
                     <label class="block text-xs font-bold text-slate-700 mb-1">Necessidade Principal</label>
-                    <textarea id="lead-dor" rows="3" required placeholder="Ex: Triagem de casos, atendimento fora do horário comercial..." class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-sm text-slate-900 focus:outline-none focus:border-blue-600"></textarea>
+                    <textarea id="lead-dor" rows="3" required placeholder="Ex: Triagem de leads, atendimento fora do horário comercial..." class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-sm text-slate-900 focus:outline-none focus:border-blue-600"></textarea>
                 </div>
                 <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-xl text-sm transition">
                     💬 Enviar Detalhes no WhatsApp
@@ -674,7 +692,7 @@
                 sku: "SKU: DIG-START-01",
                 preco: "R$ 297/mês",
                 breadcrumb: "Plano Start Essencial — 1 WhatsApp + Atendimento 24/7",
-                descricao: "1 número de WhatsApp, atendimento 24/7 com IA e Command Center básico para operações iniciais.",
+                descricao: "1 número de WhatsApp, atendimento 24/7 com IA e Command Center básico para qualquer segmento comercial.",
                 canais: "1 Número"
             },
             pro: {
@@ -682,7 +700,7 @@
                 sku: "SKU: DIG-PRO-MULTIMODAL",
                 preco: "R$ 497/mês",
                 breadcrumb: "Plano Pro Multimodal — 1 WhatsApp + Áudio & Foto",
-                descricao: "Compreende áudios e imagens, script jurídico, comercial ou drogaria, Command Center completo e operação contínua no servidor.",
+                descricao: "Compreende áudios e imagens, script sob medida para qualquer ramo (ex.: advocacia, comércio ou drogaria), Command Center completo e operação contínua.",
                 canais: "1 Número"
             },
             scale: {
@@ -690,7 +708,7 @@
                 sku: "SKU: DIG-BUSINESS-SCALE",
                 preco: "R$ 897/mês",
                 breadcrumb: "Plano Business Scale — Até 3 Números + Base em PDFs",
-                descricao: "Até 3 números independentes, recursos multimídia completos e base de conhecimento em PDFs para equipes maiores.",
+                descricao: "Até 3 números independentes, recursos multimídia completos e base de conhecimento em PDFs para qualquer operação comercial.",
                 canais: "Até 3 Números"
             }
         };
@@ -699,6 +717,130 @@
         let focoSelecionado = "Escritório de Advocacia";
         let interesseAtual = "Plano Pro Multimodal";
         const historicoGemini = [];
+
+        function obterSessionIdChat() {
+            const chave = "digitavia_chat_session_id";
+            let sid = localStorage.getItem(chave);
+            if (!sid) {
+                sid = `sess_${Date.now()}_${Math.random().toString(36).slice(2, 9)}`;
+                localStorage.setItem(chave, sid);
+            }
+            return sid;
+        }
+
+        const SESSION_ID_CHAT = obterSessionIdChat();
+        const PERFIL_KEY = "digitavia_perfil_visitante";
+
+        function carregarPerfilVisitante() {
+            try {
+                const salvo = JSON.parse(localStorage.getItem(PERFIL_KEY) || "{}") || {};
+                const params = new URLSearchParams(window.location.search);
+                if (params.get("nome")) salvo.nome = params.get("nome").trim();
+                if (params.get("segmento")) salvo.segmento = params.get("segmento").trim();
+                if (params.get("whatsapp")) salvo.whatsapp = params.get("whatsapp").trim();
+                return salvo;
+            } catch (_) {
+                return {};
+            }
+        }
+
+        let perfilVisitante = carregarPerfilVisitante();
+
+        function salvarPerfilVisitante(parcial = {}) {
+            perfilVisitante = {
+                ...perfilVisitante,
+                ...Object.fromEntries(
+                    Object.entries(parcial).filter(([, v]) => v && String(v).trim() !== "")
+                )
+            };
+            try {
+                localStorage.setItem(PERFIL_KEY, JSON.stringify(perfilVisitante));
+            } catch (_) {}
+            atualizarCabecalhoChatPersonalizado();
+        }
+
+        function atualizarCabecalhoChatPersonalizado() {
+            const tituloEl = document.querySelector("#gemini-chat-panel .text-sm.font-bold.leading-tight");
+            if (!tituloEl) return;
+            if (perfilVisitante.nome) {
+                tituloEl.textContent = `Digitavia • Atendimento de ${perfilVisitante.nome}`;
+            } else {
+                tituloEl.textContent = "Digitavia • Agente IA Online";
+            }
+        }
+
+        async function persistirMensagemHistorico(autor, texto) {
+            const registro = {
+                sessionId: SESSION_ID_CHAT,
+                autor,
+                texto: String(texto || ""),
+                timestamp: new Date().toISOString(),
+                metadata: {
+                    pagina: window.location.pathname,
+                    planoSelecionado,
+                    focoSelecionado,
+                    interesseAtual,
+                    perfil: perfilVisitante
+                }
+            };
+
+            try {
+                const localKey = `digitavia_hist_${SESSION_ID_CHAT}`;
+                const atual = JSON.parse(localStorage.getItem(localKey) || "[]");
+                atual.push(registro);
+                localStorage.setItem(localKey, JSON.stringify(atual));
+            } catch (_) {}
+
+            try {
+                await fetch("/api/chat-historico", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(registro)
+                });
+            } catch (_) {}
+        }
+
+        let sessaoAnteriorCarregada = false;
+        let saudacaoRegistrada = false;
+
+        async function restaurarSessaoChatAnterior() {
+            if (sessaoAnteriorCarregada) return;
+            sessaoAnteriorCarregada = true;
+
+            try {
+                const resp = await fetch(`/api/chat-historico/${encodeURIComponent(SESSION_ID_CHAT)}`);
+                const json = await resp.json();
+                const sessao = json?.sessao;
+                if (!sessao) return;
+
+                if (sessao.metadata?.perfil) {
+                    salvarPerfilVisitante(sessao.metadata.perfil);
+                    dadosLeadAcumulados = {
+                        nome: perfilVisitante.nome || "",
+                        segmento: perfilVisitante.segmento || "",
+                        telefone: perfilVisitante.whatsapp || ""
+                    };
+                }
+
+                const msgs = Array.isArray(sessao.mensagens) ? sessao.mensagens : [];
+                if (msgs.length > 0) {
+                    const container = document.getElementById("gemini-mensagens");
+                    if (container) container.innerHTML = "";
+                    historicoGemini.length = 0;
+
+                    for (const m of msgs) {
+                        if (m.autor === "usuario" || m.autor === "ia") {
+                            adicionarMensagemChat(m.autor, m.texto, false);
+                            historicoGemini.push({
+                                role: m.autor === "usuario" ? "user" : "model",
+                                parts: [{ text: m.texto }]
+                            });
+                        }
+                    }
+                    saudacaoRegistrada = true;
+                }
+            } catch (_) {}
+        }
 
         function selecionarVariante(chave) {
             if (!PLANOS_INFO[chave]) return;
@@ -725,15 +867,34 @@
             const info = PLANOS_INFO[planoSelecionado];
             interesseAtual = `${info.nome} (${foco})`;
 
-            const btnJur = document.getElementById("foco-juridico");
-            const btnCom = document.getElementById("foco-comercio");
-            const btnDro = document.getElementById("foco-drogaria");
+            const mapaBotoes = [
+                { id: "foco-juridico", match: "Advocacia" },
+                { id: "foco-comercio", match: "Comércio" },
+                { id: "foco-drogaria", match: "Drogaria" },
+                { id: "foco-outro", match: "Outro Segmento" }
+            ];
             const base = "foco-btn py-2.5 px-2.5 rounded-xl border text-xs font-bold transition";
             const ativo = "foco-btn py-2.5 px-2.5 rounded-xl border-2 border-blue-600 bg-blue-50 text-blue-800 text-xs font-bold transition";
 
-            btnJur.className = foco.includes("Advocacia") ? ativo : `${base} border-slate-200 text-slate-700 hover:border-blue-500`;
-            btnCom.className = foco.includes("Comércio") ? ativo : `${base} border-slate-200 text-slate-700 hover:border-blue-500`;
-            btnDro.className = foco.includes("Drogaria") ? ativo : `${base} border-slate-200 text-slate-700 hover:border-blue-500`;
+            mapaBotoes.forEach(({ id, match }) => {
+                const el = document.getElementById(id);
+                if (el) {
+                    el.className = foco.includes(match) ? ativo : `${base} border-slate-200 text-slate-700 hover:border-blue-500`;
+                }
+            });
+        }
+
+        function alternarCampoOutroSegmento() {
+            const selectSeg = document.getElementById("lead-segmento");
+            const inputOutro = document.getElementById("lead-segmento-outro");
+            if (!selectSeg || !inputOutro) return;
+            if (selectSeg.value === "Outro Segmento Comercial") {
+                inputOutro.classList.remove("hidden");
+                inputOutro.required = true;
+            } else {
+                inputOutro.classList.add("hidden");
+                inputOutro.required = false;
+            }
         }
 
         function mudarVisualizacaoPreview(modo) {
@@ -760,10 +921,21 @@
             interesseAtual = interesse;
             document.getElementById("modal-interesse-badge").textContent = `Interesse: ${interesse}`;
             const selectSeg = document.getElementById("lead-segmento");
+            const inputOutro = document.getElementById("lead-segmento-outro");
             const lower = interesse.toLowerCase();
+
             if (lower.includes("advocacia")) selectSeg.value = "Escritório de Advocacia";
             else if (lower.includes("comércio")) selectSeg.value = "Comércio / Loja / Varejo";
             else if (lower.includes("drogaria")) selectSeg.value = "Drogaria / Farmácia";
+            else if (lower.includes("outro segmento")) selectSeg.value = "Outro Segmento Comercial";
+
+            alternarCampoOutroSegmento();
+            if (selectSeg.value === "Outro Segmento Comercial" && inputOutro && perfilVisitante.segmento) {
+                inputOutro.value = perfilVisitante.segmento;
+            }
+
+            if (perfilVisitante.nome) document.getElementById("lead-nome").value = perfilVisitante.nome;
+            if (perfilVisitante.whatsapp) document.getElementById("lead-telefone").value = perfilVisitante.whatsapp;
 
             const modal = document.getElementById("modal-contato");
             modal.classList.remove("hidden");
@@ -784,9 +956,16 @@
         function enviarParaWhatsapp(event) {
             event.preventDefault();
             const nome = document.getElementById("lead-nome").value.trim();
-            const segmento = document.getElementById("lead-segmento").value;
+            let segmento = document.getElementById("lead-segmento").value;
+            const segmentoOutro = (document.getElementById("lead-segmento-outro")?.value || "").trim();
+            if (segmento === "Outro Segmento Comercial" && segmentoOutro) {
+                segmento = segmentoOutro;
+            }
+
             const telefone = document.getElementById("lead-telefone").value.trim();
             const dor = document.getElementById("lead-dor").value.trim();
+
+            salvarPerfilVisitante({ nome, segmento, whatsapp: telefone });
 
             const mensagem =
                 `Olá! Vim pelo site da *Digitavia*.\n\n` +
@@ -796,8 +975,9 @@
                 `*Interesse:* ${interesseAtual}\n` +
                 `*Necessidade:* ${dor}`;
 
+            persistirMensagemHistorico("modal_whatsapp", mensagem);
             const url = `https://wa.me/${NUMERO_WHATSAPP_VENDAS}?text=${encodeURIComponent(mensagem)}`;
-            window.open(url, "_blank");
+            window.open(url, "_blank", "noopener,noreferrer");
             fecharModalContato();
         }
 
@@ -821,20 +1001,41 @@
             });
         }
 
-        const SYSTEM_PROMPT_DIGITAVIA = `Você é o assistente virtual oficial da Digitavia (Agentes Autônomos de IA para Advocacia, Comércio e Drogarias no WhatsApp).
-Seu nome é Assistente Digitavia.
-Responda em português, de forma clara, natural, direta e prestativa, adaptando-se à pergunta do usuário (nunca repita sempre o mesmo texto pronto).
-Informações oficiais da Digitavia:
-- Planos mensais: Start Essencial (R$ 297/mês - 1 número, 24/7, Command Center básico), Pro Multimodal (R$ 497/mês - 1 número, ouve áudios e lê imagens, script jurídico, comercial ou drogaria, Command Center completo, operação contínua no servidor), Business Scale (R$ 897/mês - até 3 números, recursos do Pro, base de conhecimento em PDFs).
-- Recursos: Debounce inteligente (agrupa mensagens picadas), leitura de áudio e imagem, transbordo humano automático quando o cliente pede atendente, continuidade operacional no servidor e painel Command Center web.
-- Não precisa trocar o número atual de WhatsApp; conexão por QR Code.
-- Prazo de implantação: até 48h após reunião de alinhamento.
-- WhatsApp comercial para demonstração/contratação: (62) 99657-585.`;
+        const SYSTEM_PROMPT_DIGITAVIA = `Você é o Assistente Digitavia (atendimento comercial sobre agentes autônomos de IA no WhatsApp para qualquer segmento comercial — advocacia, comércio e drogarias são apenas exemplos).
 
-        function abrirAssistenteGemini() {
+REGRAS OBRIGATÓRIAS DE RESPOSTA:
+- Seja curto, direto e fácil de ler no chat (no máximo 4 a 6 linhas ou até 3 itens curtos).
+- Nunca despeje tudo de uma vez nem repita informações que o usuário não pediu.
+- Responda exatamente o que foi perguntado e faça NO MÁXIMO 1 pergunta curta no final para avançar.
+- Se ainda não souber o nome do cliente, pergunte educadamente junto com a dúvida ou próximo passo. Assim que souber o nome e o segmento, personalize as respostas para o negócio dele.
+- Não use markdown com asteriscos (nada de ** ou *). Escreva texto limpo em português natural.
+
+INFORMAÇÕES OFICIAIS:
+- Start Essencial (R$ 297/mês): 1 WhatsApp, 24/7, Command Center básico para qualquer segmento comercial.
+- Pro Multimodal (R$ 497/mês): 1 WhatsApp, ouve áudios e lê imagens, scripts sob medida para qualquer segmento, Command Center completo.
+- Business Scale (R$ 897/mês): até 3 números, recursos do Pro e base de conhecimento em PDFs.
+- Sem trocar o número atual (QR Code), implantação em até 48h, transbordo humano automático.
+- WhatsApp comercial: (62) 99657-585.`;
+
+        async function abrirAssistenteGemini() {
             const panel = document.getElementById("gemini-chat-panel");
             if (panel) {
                 panel.classList.remove("hidden");
+                atualizarCabecalhoChatPersonalizado();
+                await restaurarSessaoChatAnterior();
+
+                if (!saudacaoRegistrada) {
+                    saudacaoRegistrada = true;
+                    const msgInicial = perfilVisitante.nome
+                        ? `Olá, ${perfilVisitante.nome}! Que bom ter você por aqui. Como posso ajudar hoje com nossos agentes no WhatsApp?`
+                        : "Olá! Sou o assistente da Digitavia. Atendemos qualquer segmento comercial (advocacia, comércio e drogarias são apenas exemplos). Como posso ajudar hoje? Se quiser, diga seu nome e o ramo da sua empresa.";
+
+                    const container = document.getElementById("gemini-mensagens");
+                    if (container && container.firstElementChild) {
+                        container.firstElementChild.textContent = msgInicial;
+                    }
+                    persistirMensagemHistorico("ia", msgInicial);
+                }
                 document.getElementById("gemini-input-pergunta")?.focus();
             }
         }
@@ -854,9 +1055,13 @@ Informações oficiais da Digitavia:
             }
         }
 
-        function adicionarMensagemChat(autor, texto) {
+        function adicionarMensagemChat(autor, texto, salvar = true) {
             const container = document.getElementById("gemini-mensagens");
             if (!container) return;
+
+            const textoLimpo = String(texto || "")
+                .replace(/\*\*/g, "")
+                .replace(/^\s*\*\s+/gm, "• ");
 
             const bolha = document.createElement("div");
             if (autor === "usuario") {
@@ -864,14 +1069,22 @@ Informações oficiais da Digitavia:
             } else {
                 bolha.className = "bg-white border border-slate-200 text-slate-800 rounded-2xl rounded-tl-sm p-3 max-w-[88%]";
             }
-            bolha.textContent = texto;
+            bolha.textContent = textoLimpo;
             container.appendChild(bolha);
             container.scrollTop = container.scrollHeight;
+
+            if (salvar) {
+                persistirMensagemHistorico(autor, textoLimpo);
+            }
         }
 
         let aguardandoDadosTransbordo = false;
         let transbordoJaEnviado = false;
-        let dadosLeadAcumulados = { nome: "", segmento: "", telefone: "" };
+        let dadosLeadAcumulados = {
+            nome: perfilVisitante.nome || "",
+            segmento: perfilVisitante.segmento || "",
+            telefone: perfilVisitante.whatsapp || ""
+        };
 
         function extrairDadosLeadTexto(texto) {
             const raw = String(texto || "").trim();
@@ -884,20 +1097,39 @@ Informações oficiais da Digitavia:
                 segmento = "Escritório de Advocacia";
             } else if (lower.includes("comércio") || lower.includes("comercio") || lower.includes("loja") || lower.includes("varejo")) {
                 segmento = "Comércio / Loja / Varejo";
+            } else {
+                const matchSegLivre = raw.match(/\b(contabil\w*|clínic\w*|clinic\w*|imobiliár\w*|imobiliar\w*|odonto\w*|estétic\w*|estetic\w*|oficina\w*|academ\w*|escola\w*|construtor\w*|transport\w*|agênci\w*|agenci\w*|restauran\w*|pet\s?shop\w*|segur\w*|consultor\w*)\b/i);
+                if (matchSegLivre) segmento = matchSegLivre[1];
             }
 
             const matchesFone = raw.match(/(?:\+?55\s*)?(?:\(?\d{2}\)?\s*)?\d{4,5}[-\s]?\d{4}/g);
             const telefone = matchesFone ? matchesFone[matchesFone.length - 1].trim() : "";
 
             let nome = "";
-            const matchNome = raw.match(/(?:meu nome [ée]|sou(?:\s+o|\s+a)?|aqui [ée](?:\s+o|\s+a)?)\s+([A-ZÀ-Úa-zà-ú]+(?:\s+[A-ZÀ-Úa-zà-ú]+)?)/i);
+            const matchNome = raw.match(/(?:meu nome [ée]|me chamo|sou(?:\s+o|\s+a)?|aqui [ée](?:\s+o|\s+a)?)\s+([A-ZÀ-Úa-zà-ú]+(?:\s+[A-ZÀ-Úa-zà-ú]+)?)/i);
             if (matchNome && matchNome[1]) {
-                nome = matchNome[1].replace(/\b(sou|da|do|de|meu|whatsapp|fone|telefone)\b.*$/i, "").trim();
-            } else if (aguardandoDadosTransbordo && !telefone && !segmento && raw.length <= 45) {
-                nome = raw;
+                nome = matchNome[1].replace(/\b(sou|da|do|de|meu|whatsapp|fone|telefone|e|tenho|trabalho)\b.*$/i, "").trim();
+            } else if (!telefone && !segmento && /^[A-ZÀ-Úa-zà-ú]{2,20}(?:\s+[A-ZÀ-Úa-zà-ú]{2,20})?$/.test(raw)) {
+                const palavrasIgnorar = ["oi", "olá", "ola", "bom dia", "boa tarde", "boa noite", "quero sim", "sim", "não", "nao", "ok", "obrigado", "obrigada", "planos", "preço", "preco"];
+                if (!palavrasIgnorar.includes(lower)) {
+                    nome = raw;
+                }
             }
 
             return { nome, segmento, telefone };
+        }
+
+        function atualizarPerfilAPartirDoTexto(texto) {
+            const extraido = extrairDadosLeadTexto(texto);
+            if (extraido.nome) dadosLeadAcumulados.nome = extraido.nome;
+            if (extraido.segmento) dadosLeadAcumulados.segmento = extraido.segmento;
+            if (extraido.telefone) dadosLeadAcumulados.telefone = extraido.telefone;
+
+            salvarPerfilVisitante({
+                nome: dadosLeadAcumulados.nome,
+                segmento: dadosLeadAcumulados.segmento,
+                whatsapp: dadosLeadAcumulados.telefone
+            });
         }
 
         function adicionarMensagemEncaminhamentoChat(dados) {
@@ -910,6 +1142,9 @@ Informações oficiais da Digitavia:
                 `Olá! Vim pelo chat do site da Digitavia e gostaria de falar com um atendente.${dados.nome ? ` Meu nome é ${dados.nome}` : ""}${resumoSeg}${resumoTel}.`
             );
             const linkWa = `https://wa.me/${NUMERO_WHATSAPP_VENDAS}?text=${msgTexto}`;
+
+            const textoHistorico = `Encaminhamento registrado para ${dados.nome || "visitante"}${resumoSeg}${resumoTel}.`;
+            persistirMensagemHistorico("encaminhamento", textoHistorico);
 
             const box = document.createElement("div");
             box.className = "bg-white border border-emerald-200 text-slate-800 rounded-2xl rounded-tl-sm p-3.5 max-w-[92%] space-y-2.5 shadow-sm";
@@ -936,9 +1171,10 @@ Informações oficiais da Digitavia:
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({
-                        nome: dados.nome || "Visitante do Chat",
-                        segmento: dados.segmento || focoSelecionado,
-                        telefone: dados.telefone || "Não informado",
+                        sessionId: SESSION_ID_CHAT,
+                        nome: dados.nome || perfilVisitante.nome || "Visitante do Chat",
+                        segmento: dados.segmento || perfilVisitante.segmento || focoSelecionado,
+                        telefone: dados.telefone || perfilVisitante.whatsapp || "Não informado",
                         necessidade: ultimaMsg,
                         historico: historicoGemini
                     })
@@ -955,7 +1191,8 @@ Informações oficiais da Digitavia:
             const pergunta = (input?.value || "").trim();
             if (!pergunta) return;
 
-            adicionarMensagemChat("usuario", pergunta);
+            atualizarPerfilAPartirDoTexto(pergunta);
+            adicionarMensagemChat("usuario", pergunta, true);
             input.value = "";
             if (botao) botao.disabled = true;
 
@@ -966,24 +1203,20 @@ Informações oficiais da Digitavia:
 
             const pLower = pergunta.toLowerCase();
             const pediuHumano = ["humano", "atendente", "especialista", "pessoa", "falar com alguém", "falar com alguem", "whatsapp", "contato"].some(t => pLower.includes(t));
-            const extraido = extrairDadosLeadTexto(pergunta);
-
-            if (extraido.nome) dadosLeadAcumulados.nome = extraido.nome;
-            if (extraido.segmento) dadosLeadAcumulados.segmento = extraido.segmento;
-            if (extraido.telefone) dadosLeadAcumulados.telefone = extraido.telefone;
 
             if (pediuHumano && !dadosLeadAcumulados.telefone) {
                 aguardandoDadosTransbordo = true;
+                const saudacaoNome = dadosLeadAcumulados.nome ? `${dadosLeadAcumulados.nome}, para` : "Para";
                 const respostaSolicitacao =
-                    "Com certeza! Para eu encaminhar você ao nosso atendente e avisar a equipe no WhatsApp, informe seu nome e seu WhatsApp com DDD (ou clique no botão abaixo para ir direto ao WhatsApp).";
+                    `Com certeza! ${saudacaoNome} eu encaminhar você ao nosso atendente e avisar a equipe no WhatsApp, informe seu nome e seu WhatsApp com DDD (ou clique no botão abaixo).`;
 
                 const container = document.getElementById("gemini-mensagens");
                 if (container) {
-                    const linkDireto = `https://wa.me/${NUMERO_WHATSAPP_VENDAS}?text=${encodeURIComponent("Olá! Vim pelo chat da Digitavia e gostaria de falar com um atendente.")}`;
+                    const linkDireto = `https://wa.me/${NUMERO_WHATSAPP_VENDAS}?text=${encodeURIComponent(`Olá! Vim pelo chat da Digitavia${dadosLeadAcumulados.nome ? ` (sou ${dadosLeadAcumulados.nome})` : ""} e gostaria de falar com um atendente.`)}`;
                     const bolha = document.createElement("div");
                     bolha.className = "bg-white border border-slate-200 text-slate-800 rounded-2xl rounded-tl-sm p-3 max-w-[90%] space-y-2";
                     bolha.innerHTML = `
-                        <p>Com certeza! Para encaminhar você ao nosso atendente e avisar a equipe no WhatsApp, informe seu <strong>nome</strong> e seu <strong>WhatsApp com DDD</strong>.</p>
+                        <p>Com certeza! ${saudacaoNome} encaminhar você ao nosso atendente e avisar a equipe no WhatsApp, informe seu <strong>nome</strong> e seu <strong>WhatsApp com DDD</strong>.</p>
                         <a href="${linkDireto}" target="_blank" rel="noopener noreferrer"
                             class="inline-flex items-center justify-center w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2 px-3 rounded-xl text-xs transition">
                             💬 Falar Direto no WhatsApp (62) 99657-585
@@ -992,6 +1225,7 @@ Informações oficiais da Digitavia:
                     container.appendChild(bolha);
                     container.scrollTop = container.scrollHeight;
                 }
+                persistirMensagemHistorico("ia", respostaSolicitacao);
                 historicoGemini.push({ role: "model", parts: [{ text: respostaSolicitacao }] });
                 if (botao) botao.disabled = false;
                 input?.focus();
@@ -1005,12 +1239,22 @@ Informações oficiais da Digitavia:
                 return;
             }
 
+            const contextoCliente = [
+                perfilVisitante.nome ? `Nome do cliente: ${perfilVisitante.nome}` : "Nome do cliente: ainda não informado",
+                perfilVisitante.segmento ? `Segmento informado: ${perfilVisitante.segmento}` : `Segmento selecionado na página: ${focoSelecionado}`,
+                perfilVisitante.whatsapp ? `WhatsApp informado: ${perfilVisitante.whatsapp}` : null,
+                `Plano selecionado na página: ${PLANOS_INFO[planoSelecionado]?.nome || planoSelecionado}`
+            ].filter(Boolean).join(" | ");
+
+            const instrucaoPersonalizada = `${SYSTEM_PROMPT_DIGITAVIA}\n\nDADOS CONHECIDOS DO CLIENTE (use com naturalidade):\n${contextoCliente}`;
+
             try {
                 const resp = await fetch("/api/gemini", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({
-                        systemInstruction: SYSTEM_PROMPT_DIGITAVIA,
+                        sessionId: SESSION_ID_CHAT,
+                        systemInstruction: instrucaoPersonalizada,
                         contents: historicoGemini
                     })
                 });
@@ -1020,9 +1264,10 @@ Informações oficiais da Digitavia:
                     role: "model",
                     parts: [{ text: respostaTexto }]
                 });
-                adicionarMensagemChat("ia", respostaTexto);
+                adicionarMensagemChat("ia", respostaTexto, true);
             } catch (err) {
-                adicionarMensagemChat("ia", "Ocorreu um erro ao consultar o assistente. Tente novamente em instantes.");
+                const msgErro = "Ocorreu um erro ao consultar o assistente. Tente novamente em instantes.";
+                adicionarMensagemChat("ia", msgErro, true);
             } finally {
                 if (botao) botao.disabled = false;
                 input?.focus();
@@ -1031,6 +1276,7 @@ Informações oficiais da Digitavia:
 
         selecionarVariante("pro");
         selecionarFoco("Escritório de Advocacia");
+        atualizarCabecalhoChatPersonalizado();
     </script>
 </body>
 </html>

@@ -1,0 +1,216 @@
+{
+  "sessoes": {
+    "sess_1795737677293_zytar5f": {
+      "sessionId": "sess_1795737677293_zytar5f",
+      "criadoEm": "2026-11-27T00:11:40.478Z",
+      "atualizadoEm": "2026-11-27T00:11:55.498Z",
+      "metadata": {
+        "pagina": "/",
+        "planoSelecionado": "pro",
+        "focoSelecionado": "Escritório de Advocacia",
+        "interesseAtual": "Pro Multimodal (Escritório de Advocacia)"
+      },
+      "mensagens": [
+        {
+          "id": "1795738300478-4jn1m",
+          "timestamp": "2026-11-27T00:11:40.478Z",
+          "autor": "ia",
+          "texto": "Olá! Sou o assistente da Digitavia. Como posso ajudar você hoje com nossos agentes autônomos no WhatsApp?"
+        },
+        {
+          "id": "1795738307233-70fdq",
+          "timestamp": "2026-11-27T00:11:47.233Z",
+          "autor": "usuario",
+          "texto": "olá"
+        },
+        {
+          "id": "1795738315498-amruz",
+          "timestamp": "2026-11-27T00:11:55.498Z",
+          "autor": "ia",
+          "texto": "Olá! Seja bem-vindo à Digitavia.\n\nNossos agentes de inteligência artificial automatizam o atendimento no WhatsApp 24/7 para advocacia, comércio e drogarias.\n\nQual é o seu ramo de atuação para eu te mostrar a melhor solução?"
+        }
+      ]
+    },
+    "sess_1795739542247_cbxx0pu": {
+      "sessionId": "sess_1795739542247_cbxx0pu",
+      "criadoEm": "2026-11-27T00:32:54.132Z",
+      "atualizadoEm": "2026-11-27T14:32:07.775Z",
+      "metadata": {
+        "pagina": "/",
+        "planoSelecionado": "scale",
+        "focoSelecionado": "Drogaria / Farmácia",
+        "interesseAtual": "Business Scale (Drogaria / Farmácia)"
+      },
+      "mensagens": [
+        {
+          "id": "1795739574132-99dax",
+          "timestamp": "2026-11-27T00:32:54.132Z",
+          "autor": "ia",
+          "texto": "Olá! Sou o assistente da Digitavia. Como posso ajudar você hoje com nossos agentes autônomos no WhatsApp?"
+        },
+        {
+          "id": "1795739594183-wz990",
+          "timestamp": "2026-11-27T00:33:14.183Z",
+          "autor": "usuario",
+          "texto": "Vc tira dúvidas de todos os tipos?"
+        },
+        {
+          "id": "1795739677678-tyu3v",
+          "timestamp": "2026-11-27T00:34:37.678Z",
+          "autor": "ia",
+          "texto": "Eu tiro dúvidas focadas nos nossos agentes de Inteligência Artificial para WhatsApp. Posso te explicar sobre planos, preços, funcionalidades e como a IA funciona para advocacia, comércio e drogarias.\n\nQual é o segmento da sua empresa hoje?"
+        },
+        {
+          "id": "1795739677815-3run0",
+          "timestamp": "2026-11-27T00:34:37.815Z",
+          "autor": "usuario",
+          "texto": "Alguém aí?"
+        },
+        {
+          "id": "1795739754215-wdzc6",
+          "timestamp": "2026-11-27T00:35:54.215Z",
+          "autor": "ia",
+          "texto": "Olá, estou por aqui! \n\nComo posso te ajudar com a automação de atendimento no seu WhatsApp?"
+        },
+        {
+          "id": "1795739759260-n6nh3",
+          "timestamp": "2026-11-27T00:35:59.260Z",
+          "autor": "usuario",
+          "texto": "Quero falar com atendente"
+        },
+        {
+          "id": "1795739759269-f6i4o",
+          "timestamp": "2026-11-27T00:35:59.269Z",
+          "autor": "ia",
+          "texto": "Com certeza! Para eu encaminhar você ao nosso atendente e avisar a equipe no WhatsApp, informe seu nome e seu WhatsApp com DDD (ou clique no botão abaixo para ir direto ao WhatsApp)."
+        },
+        {
+          "id": "1795739777319-lrpof",
+          "timestamp": "2026-11-27T00:36:17.318Z",
+          "autor": "usuario",
+          "texto": "Cristiano 62 999615120"
+        },
+        {
+          "id": "1795739778294-77rqn",
+          "timestamp": "2026-11-27T00:36:18.294Z",
+          "autor": "encaminhamento",
+          "texto": "Encaminhamento registrado para visitante (62 999615120)."
+        },
+        {
+          "id": "1795789840163-2dolz",
+          "timestamp": "2026-11-27T14:30:40.163Z",
+          "autor": "ia",
+          "texto": "Olá! Sou o assistente da Digitavia. Como posso ajudar você hoje com nossos agentes autônomos no WhatsApp?"
+        },
+        {
+          "id": "1795789867816-vzo7s",
+          "timestamp": "2026-11-27T14:31:07.816Z",
+          "autor": "usuario",
+          "texto": "Meu nome é Vanessa é queria conhecer os planos"
+        },
+        {
+          "id": "1795789876130-peho6",
+          "timestamp": "2026-11-27T14:31:16.130Z",
+          "autor": "ia",
+          "texto": "Olá, Vanessa! Temos três planos para o seu WhatsApp:\n\n- Start Essencial (R$ 297/mês): Atendimento 24/7 em 1 número.\n- Pro Multimodal (R$ 497/mês): Ouve áudios, lê imagens e inclui scripts personalizados.\n- Business Scale (R$ 897/mês): Até 3 números e base de conhecimento em PDFs.\n\nQual é o seu segmento hoje (Advocacia, Comércio ou Drogaria)?"
+        },
+        {
+          "id": "1795789899939-7mv6u",
+          "timestamp": "2026-11-27T14:31:39.939Z",
+          "autor": "usuario",
+          "texto": "Tenho um escritório de contabilidade"
+        },
+        {
+          "id": "1795789903865-vucfi",
+          "timestamp": "2026-11-27T14:31:43.865Z",
+          "autor": "ia",
+          "texto": "Perfeito, Vanessa! Atendemos contabilidades ajustando os scripts para tirar dúvidas frequentes e fazer a triagem de novos clientes.\n\nO plano Pro Multimodal (R$ 497/mês) costuma ser o mais indicado, pois a IA consegue ouvir áudios e ler imagens de documentos enviados pelos clientes.\n\nQuer ver como ele funcionaria na prática para a sua contabilidade?"
+        },
+        {
+          "id": "1795789927776-p4340",
+          "timestamp": "2026-11-27T14:32:07.775Z",
+          "autor": "usuario",
+          "texto": "Quero sim"
+        }
+      ]
+    },
+    "sess_1795796348102_dbkathe": {
+      "sessionId": "sess_1795796348102_dbkathe",
+      "criadoEm": "2026-11-27T16:19:27.173Z",
+      "atualizadoEm": "2026-11-27T16:20:13.635Z",
+      "metadata": {
+        "pagina": "/",
+        "planoSelecionado": "pro",
+        "focoSelecionado": "Escritório de Advocacia",
+        "interesseAtual": "Pro Multimodal (Escritório de Advocacia)",
+        "perfil": {
+          "nome": "cristiano"
+        }
+      },
+      "mensagens": [
+        {
+          "id": "1795796367173-oa61w",
+          "timestamp": "2026-11-27T16:19:27.173Z",
+          "autor": "ia",
+          "texto": "Olá! Sou o assistente da Digitavia. Atendemos qualquer segmento comercial (advocacia, comércio e drogarias são apenas exemplos). Como posso ajudar hoje? Se quiser, diga seu nome e o ramo da sua empresa."
+        },
+        {
+          "id": "1795796413529-77wpc",
+          "timestamp": "2026-11-27T16:20:13.529Z",
+          "autor": "usuario",
+          "texto": "Meu nome é cristiano e preciso fazer o teste se o agente do site está ok"
+        },
+        {
+          "id": "1795796413635-e0jpb",
+          "timestamp": "2026-11-27T16:20:13.635Z",
+          "autor": "ia",
+          "texto": "Estou online como assistente da Digitavia. Posso detalhar os planos (Start Essencial, Pro Multimodal e Business Scale), explicar como funciona a triagem por áudio/foto e transbordo humano no WhatsApp, ou encaminhar você para um especialista."
+        }
+      ]
+    },
+    "sess_1795735024011_nj14f8o": {
+      "sessionId": "sess_1795735024011_nj14f8o",
+      "criadoEm": "2026-11-27T16:50:49.053Z",
+      "atualizadoEm": "2026-11-27T17:04:21.338Z",
+      "metadata": {
+        "pagina": "/",
+        "planoSelecionado": "pro",
+        "focoSelecionado": "Escritório de Advocacia",
+        "interesseAtual": "Pro Multimodal (Escritório de Advocacia)",
+        "perfil": {}
+      },
+      "mensagens": [
+        {
+          "id": "1795798249053-zpe5b",
+          "timestamp": "2026-11-27T16:50:49.053Z",
+          "autor": "ia",
+          "texto": "Olá! Sou o assistente da Digitavia. Atendemos qualquer segmento comercial (advocacia, comércio e drogarias são apenas exemplos). Como posso ajudar hoje? Se quiser, diga seu nome e o ramo da sua empresa."
+        },
+        {
+          "id": "1795798269609-2q4e8",
+          "timestamp": "2026-11-27T16:51:09.609Z",
+          "autor": "usuario",
+          "texto": "Boa tarde, testando agente gemini"
+        },
+        {
+          "id": "1795798269727-h4vae",
+          "timestamp": "2026-11-27T16:51:09.727Z",
+          "autor": "ia",
+          "texto": "Estou online como assistente da Digitavia. Posso detalhar os planos (Start Essencial, Pro Multimodal e Business Scale), explicar como funciona a triagem por áudio/foto e transbordo humano no WhatsApp, ou encaminhar você para um especialista."
+        },
+        {
+          "id": "1795799011579-wigp1",
+          "timestamp": "2026-11-27T17:03:31.579Z",
+          "autor": "usuario",
+          "texto": "Boa tarde"
+        },
+        {
+          "id": "1795799061338-pfmv0",
+          "timestamp": "2026-11-27T17:04:21.338Z",
+          "autor": "ia",
+          "texto": "Boa tarde! Como posso ajudar você hoje com os nossos agentes de IA para o seu escritório de advocacia? Qual é o seu nome?"
+        }
+      ]
+    }
+  }
+}

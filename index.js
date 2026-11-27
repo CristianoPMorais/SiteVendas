@@ -20,11 +20,114 @@ const timestampInicioBot = Math.floor(Date.now() / 1000);
 
 app.use(express.json({ limit: '5mb' }));
 
+const DATA_DIR = path.join(__dirname, "data");
+const HISTORICO_FILE = path.join(DATA_DIR, "chat-historico.json");
+
+function garantirArquivoHistorico() {
+    if (!fs.existsSync(DATA_DIR)) {
+        fs.mkdirSync(DATA_DIR, { recursive: true });
+    }
+    if (!fs.existsSync(HISTORICO_FILE)) {
+        fs.writeFileSync(HISTORICO_FILE, JSON.stringify({ sessoes: {} }, null, 2), "utf8");
+    }
+}
+
+app.post("/api/chat-historico", (req, res) => {
+    try {
+        garantirArquivoHistorico();
+        const {
+            sessionId,
+            autor,
+            texto,
+            metadata = {}
+        } = req.body || {};
+
+        if (!sessionId || !autor || !texto) {
+            return res.status(400).json({ ok: false, erro: "Campos obrigatórios ausentes." });
+        }
+
+        const bruto = fs.readFileSync(HISTORICO_FILE, "utf8");
+        const db = JSON.parse(bruto || '{"sessoes":{}}');
+        if (!db.sessoes || typeof db.sessoes !== "object") {
+            db.sessoes = {};
+        }
+
+        const agora = new Date().toISOString();
+        if (!db.sessoes[sessionId]) {
+            db.sessoes[sessionId] = {
+                sessionId,
+                criadoEm: agora,
+                atualizadoEm: agora,
+                metadata,
+                mensagens: []
+            };
+        }
+
+        db.sessoes[sessionId].atualizadoEm = agora;
+        db.sessoes[sessionId].metadata = {
+            ...db.sessoes[sessionId].metadata,
+            ...metadata
+        };
+        db.sessoes[sessionId].mensagens.push({
+            id: `${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
+            timestamp: agora,
+            autor,
+            texto: String(texto)
+        });
+
+        fs.writeFileSync(HISTORICO_FILE, JSON.stringify(db, null, 2), "utf8");
+        return res.json({ ok: true });
+    } catch (err) {
+        console.error("Erro ao salvar histórico do chat:", err);
+        return res.status(500).json({ ok: false, erro: "Falha ao gravar histórico." });
+    }
+});
+
+// Opcional: consultar todas as conversas salvas via GET /api/chat-historico
+app.get("/api/chat-historico", (req, res) => {
+    try {
+        garantirArquivoHistorico();
+        const db = JSON.parse(fs.readFileSync(HISTORICO_FILE, "utf8"));
+        return res.json({ ok: true, data: db });
+    } catch (err) {
+        return res.status(500).json({ ok: false, erro: "Falha ao ler histórico." });
+    }
+});
+
+// Consultar histórico e perfil de uma sessão específica
+app.get("/api/chat-historico/:sessionId", (req, res) => {
+    try {
+        garantirArquivoHistorico();
+        const sessionId = String(req.params.sessionId || "").trim();
+        if (!sessionId) {
+            return res.status(400).json({ ok: false, erro: "sessionId inválido." });
+        }
+
+        const db = JSON.parse(fs.readFileSync(HISTORICO_FILE, "utf8") || '{"sessoes":{}}');
+        const sessao = db.sessoes?.[sessionId] || null;
+        return res.json({ ok: true, sessao });
+    } catch (err) {
+        return res.status(500).json({ ok: false, erro: "Falha ao consultar sessão." });
+    }
+});
+
 // Rota raiz '/' servindo o site da Digitavia antes do static (para não cair em public/index.html)
 app.get('/', (req, res) => {
-    const emPublic = path.join(__dirname, 'public', 'index_pdp_gemini.html');
-    const naRaiz = path.join(__dirname, 'index_pdp_gemini.html');
-    res.sendFile(fs.existsSync(emPublic) ? emPublic : naRaiz);
+    const candidatos = [
+        path.join(__dirname, 'public', 'index_pdp_gemini_8.html'),
+        path.join(__dirname, 'index_pdp_gemini_8.html'),
+        path.join(__dirname, 'public', 'index_pdp_gemini_7.html'),
+        path.join(__dirname, 'index_pdp_gemini_7.html'),
+        path.join(__dirname, 'public', 'index_pdp_gemini_6.html'),
+        path.join(__dirname, 'index_pdp_gemini_6.html'),
+        path.join(__dirname, 'public', 'index_pdp_gemini.html'),
+        path.join(__dirname, 'index_pdp_gemini.html')
+    ];
+    const encontrado = candidatos.find(p => fs.existsSync(p));
+    if (encontrado) {
+        return res.sendFile(encontrado);
+    }
+    return res.status(404).send('Arquivo HTML principal não encontrado.');
 });
 
 app.use(express.static(path.join(__dirname, 'public')));
@@ -50,8 +153,8 @@ const statusUsuarios = {};
 const statusAguardandoHumano = {};
 const statusConversasFinalizadas = {};
 const gruposPermitidos = [];
-const MODELO_IA = 'gemini-3.6-flash';
-const MODELOS_FALLBACK = ['gemini-3.6-flash', 'gemini-3.8-flash'];
+const MODELO_IA = 'gemini-3.8-flash';
+const MODELOS_FALLBACK = ['gemini-3.8-flash', 'gemini-3.6-flash', 'gemini-3.5-flash-lite'];
 
 let donoConectado = null;
 const donosFixos = ['556299615120'];
@@ -59,6 +162,13 @@ let isBotActiveGlobal = true;
 let connectionStatus = 'disconnected';
 let currentQRCode = null;
 let sockInstance = null;
+
+let ponteiroRotacao = 0;
+const cooldownChaves = new Map();
+
+function esperarMs(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
 
 // =========================================================
 // 📣 ESTADO DA CAMPANHA DE DISPARO CONTROLADO
@@ -69,7 +179,7 @@ let estadoCampanha = {
     enviadosSessao: 0,
     errosSessao: 0,
     ultimoEnvioEm: null,
-    mensagemAtual: `{abertura}{nome_virgula} vi a operação de vocês{estabelecimento} e notei como o atendimento no WhatsApp exige agilidade quando o balcão está movimentado.\n\nImplanto um atendente virtual humanizado no WhatsApp (24/7), sem menus de "digite 1 ou 2", que entende texto, áudio e imagem e já organiza o atendimento antes de passar para a equipe.\n\nSe fizer sentido para vocês, posso te mostrar rapidamente como encaixa na rotina da drogaria. Como está o movimento no WhatsApp por aí?`,
+    mensagemAtual: `{abertura}{nome_virgula} vi a operação de vocês{estabelecimento} e notei como o atendimento no WhatsApp exige agilidade quando o movimento aperta.\n\nImplanto um atendente virtual humanizado no WhatsApp (24/7), sem menus de "digite 1 ou 2", que entende texto, áudio e imagem e já organiza o atendimento antes de passar para a equipe.\n\nSe fizer sentido para vocês, posso te mostrar rapidamente como encaixa na rotina do negócio. Como está o movimento no WhatsApp por aí?`,
     config: {
         delayMinMs: 25000,
         delayMaxMs: 60000,
@@ -289,7 +399,7 @@ function obterListaChaves() {
         .filter(Boolean);
 
     const chavesConfig = [];
-    if (botConfig.apiKeys && Array.isArray(botConfig.apiKeys)) {
+    if (Array.isArray(botConfig.apiKeys)) {
         chavesConfig.push(...botConfig.apiKeys.map(k => String(k).trim()).filter(Boolean));
     }
     if (botConfig.apiKey) {
@@ -301,85 +411,140 @@ function obterListaChaves() {
 
 function atualizarClienteAI() {
     const chaves = obterListaChaves();
-    if (chaves.length === 0) {
-        console.error('❌ Nenhuma chave de API configurada!');
-        return;
-    }
-    if (indiceChaveAtual >= chaves.length) {
-        indiceChaveAtual = 0;
-    }
-    const chaveAtiva = chaves[indiceChaveAtual];
-    ai = new GoogleGenAI({ apiKey: chaveAtiva });
-}
-
-function esperarMs(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
+    if (chaves.length === 0) return null;
+    const chaveAtual = chaves[ponteiroRotacao % chaves.length];
+    return new GoogleGenAI({ apiKey: chaveAtual });
 }
 
 function obterModelosCandidatos(modeloSolicitado) {
     const lista = [modeloSolicitado || MODELO_IA, ...MODELOS_FALLBACK]
         .map(m => String(m || '').trim())
         .filter(Boolean);
-    return Array.from(new Set(lista));
+    return [...new Set(lista)];
 }
 
-async function gerarConteudoComRotacao(paramsRequest) {
+function classificarErroGemini(error) {
+    const status = Number(error?.status || error?.code || 0);
+    const msg = String(error?.message || '').toLowerCase();
+
+    if (status === 429 || msg.includes('429') || msg.includes('resource_exhausted') || msg.includes('quota')) {
+        return 'QUOTA';
+    }
+    if (status === 503 || status === 500 || status === 504 || msg.includes('503') || msg.includes('unavailable') || msg.includes('overloaded')) {
+        return 'TRANSIENT';
+    }
+    if (status === 400 || status === 401 || status === 403 || msg.includes('api_key_invalid') || msg.includes('permission_denied')) {
+        return 'AUTH_OR_BAD_REQUEST';
+    }
+    return 'OTHER';
+}
+
+function chaveEmCooldown(apiKey) {
+    const ate = cooldownChaves.get(apiKey) || 0;
+    if (Date.now() < ate) return true;
+    if (ate > 0) cooldownChaves.delete(apiKey);
+    return false;
+}
+
+function colocarChaveEmCooldown(apiKey, ms) {
+    cooldownChaves.set(apiKey, Date.now() + ms);
+}
+
+function ordenarChavesDisponiveis(chaves) {
+    const total = chaves.length;
+    const rotacionadas = [];
+    for (let i = 0; i < total; i++) {
+        rotacionadas.push(chaves[(ponteiroRotacao + i) % total]);
+    }
+    const ativas = rotacionadas.filter(k => !chaveEmCooldown(k));
+    // Se todas estiverem em cooldown, retorna a lista completa como último recurso
+    return ativas.length > 0 ? ativas : rotacionadas;
+}
+
+function chamarComTimeout(promessa, timeoutMs = 20000) {
+    return Promise.race([
+        promessa,
+        new Promise((_, reject) => {
+            setTimeout(() => reject(new Error(`Timeout da API Gemini após ${timeoutMs}ms`)), timeoutMs);
+        })
+    ]);
+}
+
+async function gerarConteudoComRotacao(paramsRequest, opcoes = {}) {
     const chaves = obterListaChaves();
-    if (!chaves || chaves.length === 0) {
-        throw new Error('Nenhuma chave de API configurada em apiKeys/apiKey.');
+    if (chaves.length === 0) {
+        throw new Error('Nenhuma chave de API Gemini configurada.');
     }
 
     const modelos = obterModelosCandidatos(paramsRequest.model);
-    const maxRodadas = 3;
+    const maxTentativasTotais = Math.min(opcoes.maxTentativas || 6, modelos.length * chaves.length);
+    let tentativasFeitas = 0;
     let ultimoErro = null;
 
-    for (let rodada = 0; rodada < maxRodadas; rodada++) {
-        for (const modeloAtual of modelos) {
-            for (let i = 0; i < chaves.length; i++) {
-                const idxChave = (indiceChaveAtual + i) % chaves.length;
-                indiceChaveAtual = idxChave;
+    for (const modeloAtual of modelos) {
+        const candidatas = ordenarChavesDisponiveis(chaves);
 
-                try {
-                    atualizarClienteAI();
-                    const response = await ai.models.generateContent({
+        for (const apiKey of candidatas) {
+            if (tentativasFeitas >= maxTentativasTotais) break;
+            tentativasFeitas += 1;
+
+            const clienteTentativa = new GoogleGenAI({ apiKey });
+            const idxOriginal = chaves.indexOf(apiKey);
+
+            try {
+                const resposta = await chamarComTimeout(
+                    clienteTentativa.models.generateContent({
                         ...paramsRequest,
                         model: modeloAtual
-                    });
-                    return response;
-                } catch (error) {
-                    ultimoErro = error;
-                    const msgErro = String(error?.message || '');
-                    const ehSobrecarga = error?.status === 503 || msgErro.includes('503') || msgErro.includes('UNAVAILABLE') || msgErro.includes('high demand');
-                    const ehCota = error?.status === 429 || msgErro.includes('429') || msgErro.includes('RESOURCE_EXHAUSTED');
+                    }),
+                    opcoes.timeoutMs || 20000
+                );
 
-                    console.warn(`⚠️ Erro com modelo [${modeloAtual}] / chave [${idxChave + 1}/${chaves.length}]: ${msgErro}`);
+                // Avança o ponteiro redondo para distribuir carga nas próximas chamadas
+                ponteiroRotacao = (idxOriginal + 1) % chaves.length;
+                return resposta;
+            } catch (error) {
+                ultimoErro = error;
+                const tipoErro = classificarErroGemini(error);
+                ponteiroRotacao = (idxOriginal + 1) % chaves.length;
 
-                    if (chaves.length > 1) {
-                        indiceChaveAtual = (idxChave + 1) % chaves.length;
-                        if (ehSobrecarga || ehCota) {
-                            console.log(`🔄 Alternando automaticamente para a próxima chave da API...`);
-                        }
-                    }
+                console.warn(
+                    `⚠️ Gemini [${modeloAtual}] | Chave #${idxOriginal + 1}/${chaves.length} | Tipo: ${tipoErro} | Motivo: ${error?.message || error}`
+                );
+
+                if (tipoErro === 'QUOTA') {
+                    // Pausa esta chave por 60s para não gastar tempo nela imediatamente
+                    colocarChaveEmCooldown(apiKey, 60000);
+                    await esperarMs(250);
+                } else if (tipoErro === 'TRANSIENT') {
+                    colocarChaveEmCooldown(apiKey, 10000);
+                    await esperarMs(600);
+                } else if (tipoErro === 'AUTH_OR_BAD_REQUEST') {
+                    // Chave inválida ou sem permissão: pausa por 5 minutos
+                    colocarChaveEmCooldown(apiKey, 300000);
+                } else {
+                    await esperarMs(300);
                 }
             }
         }
 
-        if (rodada < maxRodadas - 1) {
-            const pausa = 1200 * (rodada + 1);
-            await esperarMs(pausa);
-        }
+        if (tentativasFeitas >= maxTentativasTotais) break;
     }
 
-    throw ultimoErro || new Error('Todas as chaves e modelos falharam.');
+    throw ultimoErro || new Error('Falha ao obter resposta do Gemini em todas as tentativas.');
+}
+
+function esperarMs(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 function respostaFallbackDigitavia(ultimaPergunta = '') {
     const p = String(ultimaPergunta || '').toLowerCase();
     if (p.includes('especialista') || p.includes('humano') || p.includes('atendente') || p.includes('falar') || p.includes('demo') || p.includes('contato')) {
-        return 'Posso conectar você com um especialista da Digitavia agora mesmo. Clique em "Agendar Demo" no topo ou envie seu nome, segmento (Advocacia, Comércio ou Drogaria) e WhatsApp por aqui mesmo que organizamos o atendimento (WhatsApp comercial: (62) 99657-585).';
+        return 'Posso conectar você com um especialista da Digitavia agora mesmo. Clique em "Agendar Demo" no topo ou envie seu nome, segmento da sua empresa (atendemos qualquer ramo; advocacia, comércio e drogaria são apenas exemplos) e WhatsApp por aqui mesmo (WhatsApp comercial: (62) 99657-585).';
     }
     if (p.includes('plano') || p.includes('preço') || p.includes('preco') || p.includes('valor')) {
-        return 'Os planos mensais da Digitavia são:\n• Start Essencial: R$ 297/mês (1 WhatsApp, 24/7, Command Center básico)\n• Pro Multimodal: R$ 497/mês (1 WhatsApp, ouve áudios e lê fotos, script jurídico/comércio/drogaria, Command Center completo e rotação automática de chaves)\n• Business Scale: R$ 897/mês (até 3 números, recursos do Pro e base de conhecimento em PDFs).';
+        return 'Os planos mensais da Digitavia atendem qualquer segmento comercial e custam:\n• Start Essencial: R$ 297/mês (1 WhatsApp, 24/7, Command Center básico)\n• Pro Multimodal: R$ 497/mês (1 WhatsApp, ouve áudios e lê fotos, script sob medida para qualquer ramo, Command Center completo e rotação automática de chaves)\n• Business Scale: R$ 897/mês (até 3 números, recursos do Pro e base de conhecimento em PDFs).';
     }
     if (p.includes('prazo') || p.includes('implant') || p.includes('demora')) {
         return 'A implantação assistida pela Digitavia leva até 48 horas após o alinhamento, mantendo seu número atual de WhatsApp via QR Code.';
@@ -415,7 +580,7 @@ app.post('/api/gemini', async (req, res) => {
         });
     }
 
-    try {
+   try {
         const resposta = await gerarConteudoComRotacao({
             model: MODELO_IA,
             contents: safeContents,
@@ -426,11 +591,11 @@ app.post('/api/gemini', async (req, res) => {
             return res.json({
                 text: texto,
                 totalKeys: chaves.length,
-                slotUsed: (indiceChaveAtual % chaves.length) + 1
+                slotUsed: ((ponteiroRotacao - 1 + chaves.length) % chaves.length) + 1
             });
         }
-    } catch (_) {
-        // Fallback abaixo
+    } catch (err) {
+        console.error('❌ Erro em /api/gemini:', err?.status || err?.code || '', err?.message || err);
     }
 
     return res.json({
@@ -441,9 +606,33 @@ app.post('/api/gemini', async (req, res) => {
 });
 
 app.post('/api/transbordo-web', async (req, res) => {
-    const { nome, segmento, telefone, necessidade, historico } = req.body || {};
+    const { sessionId, nome, segmento, telefone, necessidade, historico } = req.body || {};
     const numLimpo = formatarNumero(telefone);
     const destinoWhatsapp = '556299615120';
+
+    if (sessionId) {
+        try {
+            garantirArquivoHistorico();
+            const bruto = fs.readFileSync(HISTORICO_FILE, 'utf8');
+            const db = JSON.parse(bruto || '{"sessoes":{}}');
+            if (db.sessoes && db.sessoes[sessionId]) {
+                const agora = new Date().toISOString();
+                db.sessoes[sessionId].atualizadoEm = agora;
+                db.sessoes[sessionId].metadata = {
+                    ...db.sessoes[sessionId].metadata,
+                    transbordoSolicitadoEm: agora,
+                    leadTransbordo: {
+                        nome: nome || null,
+                        segmento: segmento || null,
+                        telefone: numLimpo || telefone || null
+                    }
+                };
+                fs.writeFileSync(HISTORICO_FILE, JSON.stringify(db, null, 2), 'utf8');
+            }
+        } catch (err) {
+            console.error('Erro ao registrar transbordo na sessão:', err);
+        }
+    }
 
     const resumoHist = Array.isArray(historico)
         ? historico
